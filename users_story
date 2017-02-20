@@ -1,0 +1,28 @@
+Events page
+User sees a list of event
+	There are filters for events categories and months	
+User click the event
+
+Single event page/panel 
+	Reads the info, check dates, see the cost
+		Could share on social media
+		If interested clicks "Add to cart" and get forwarded to the cart page
+
+Cart page
+	Check the selected product
+	Modifies the quantity if needed
+	If have coupon fills out the coupon and gets discount
+	Proceed to the checkout page
+
+Checkout page
+	Fills out billing address
+	If shipping address is different fils out the shipping address
+	Selects a payment method
+	Agrees to the terms & conditions
+	Proceed with the order
+
+Depending on the selected peyment method:
+
+Direct bank transfer: sees the account details to make a transfer and iinstrucitons 
+Stripe: sees a form to enter the card details and pay
+Paypal: forwarded to the PayPal externa payment processing page
