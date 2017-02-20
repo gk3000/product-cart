@@ -66,3 +66,37 @@ VIEWS API
 
     checkout.ejs
     - Allows the user to choose payment method
+
+
+
+
+1)Mongoose Database
+    event Schema
+       args: create a record of event
+       return: true if successful false if not
+        it tries save and tells you if it worked
+    events scheme  
+        args: view the evnets with full datails
+   update
+    args: update event with changes
+   Remove
+    args : remove the event after end date
+
+
+ 
+2) Structure of schema
+    eventName: String,
+    startDate: Date,
+    endDate: Date,
+    time:
+    subjects: String,
+    eventType: String,
+    image: Sting,
+    eventDetails: String,
+    price: Number
+
+   
+3) After creating session id it will add to the database
+   Structure of sessionSchema
+   eventID: String
+   sessinoId: String
