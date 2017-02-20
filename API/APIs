@@ -4,8 +4,7 @@ CONTROLLERS/SERVER.JS
 
     GET /events   
         - displays all events
-        - passes object ('events') that contains all events from the db
-        - contains 'add to cart' and 'read more' buttons that redirect to POST cart/:id and /events/:id, respectively
+        - passes array ('events') that contains all the event objects from the database
         - renders index.ejs
 
     GET /events/:id
@@ -15,15 +14,13 @@ CONTROLLERS/SERVER.JS
 
     GET /cart
         - displays the events the client has selected
-        - allows the client to edit the selected tickets, i.e. add and remove them from the cart
         - information about selected tickets and the client is stored in an object ('session')
-        - after editing, the client proceeds to /checkout via button
         - renders cart.ejs
 
     POST /cart/:id
         - creates new session object
         - adds event reference to session object
-        - creates new cookie with sessionID equal to :id
+        - creates new cookie with sessionID equal to session._id
         - redirects to /cart
 
     POST /cart/update
@@ -37,7 +34,6 @@ CONTROLLERS/SERVER.JS
     GET /checkout
         - displays checkout page
         - information about the client and the purchase is passed through the 'session' object
-        - the client can choose between multiple payment options, and will be redirected
         - renders checkout.ejs
 
     POST /checkout
@@ -46,19 +42,24 @@ CONTROLLERS/SERVER.JS
         - redirects to website where payment will be made (e.g. PayPal)
         - renders confirmation.ejs
 
+    GET /confirmation
+    ...
+
 VIEWS
     /PARTIALS
         header.ejs
         - contains header, menu and links to stylesheets
+        - is included in all ejs files
 
         footer.ejs
         - contains footer
+        - is included in all ejs files
 
     index.ejs
-    - Shows all events. They are clickable.
+    - Shows all events. Each event has a 'read more' (GET events/:id) and a 'add to cart' (POST cart/:id) button
 
     show.ejs
-    - Shows a single event with more information.
+    - Shows a single event with more information. Has a 'add to cart' button
 
     cart.ejs
     - Shows all the user's selected events
@@ -109,6 +110,5 @@ MONGOOSE API
             type: mongoose.Schema.Types.ObjectId,
             ref: "Event"
         }
-    ],
-    sessionID: String      
+    ]  
    }
