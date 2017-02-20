@@ -1,6 +1,6 @@
 Controllers API 
 
-// controlers/server
+// controllers/server
 
 
 GET /events   
@@ -45,3 +45,24 @@ arge: post, sessionID
 – redirects to/process the payment
 – redirects back to the root or displays the confirmation page
 
+
+
+VIEWS API 
+    /PARTIALS
+        header.ejs
+        - contains header, menu and links to stylesheets
+        footer.ejs
+        - contains footer
+
+    index.ejs
+    - Shows all events. They are clickable.
+
+    show.ejs
+    - Shows a single event with more information.
+
+    cart.ejs
+    - Shows all the user's selected events
+    - Allows user to remove and edit items before checkout
+
+    checkout.ejs
+    - Allows the user to choose payment method
