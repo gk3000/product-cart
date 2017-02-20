@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 
+app.set('view engine', 'ejs')
+
 // DUMMY EVENTS
 var events = [
 	{
@@ -27,6 +29,9 @@ var events = [
 	}
 ]
 
+app.get('/', function(req, res) {
+	res.render('index');
+}
 
 app.listen(4001, function(){
 	console.log("running 4001")
