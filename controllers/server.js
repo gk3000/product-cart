@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 
 // connect to our model with assigned variable to use inside the controller
 const eventsCollection = mongoose.model("events")
+const sessionCollection = mongoose.model("sessions")
 
 /*GET /events   
 Displays the events calendar page
@@ -11,9 +12,9 @@ Displays the events calendar page
 router.get("/events", function(req, res){
     eventsCollection.find({}, (err, records) =>{ 
     	if (err) {
-    		res.send ("There was an error fetching events from the database")
+    		res.redirect("error")
     	} else {
-        res.render("index", {output: records}) 
+        res.render("index", {allEvents: records}) 
 	    }
     })
      
@@ -25,18 +26,49 @@ Displays the  selected single event page
     renders the show.ejs
 */
 router.get ("/events/:id", function (req, res) {
-	eventsCollection.findOne({_id: req.params.id })
+	eventsCollection.findOne({_id: req.params.id }, (err, record) => {
+		if (err) {
+			res.redirect("error")
+		} else {
+			res.render("show", {event: record})
+		}
+	})
 })
 
 
+// POST /cart
+// adds product to cart
+// creates session ID
+// sends a cookie to the users browser
+router.post("/cart/:id", function(req, res){
+    sessionCollection.create({eventIDs: req.params.id}, (err, record) =>{
+        if (err) {
+        	res.redirect("error")
+        } else {
+        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+        }
+    }) 
+})
+
+
+
+
+
+
 /*
-GET /cart/
+GET /cart
 Displays the cart page with selected events
     renders the cart.ejs
 args: get, sessionID
 User can proceed to the checkout page 
+*/
+router.get("/cart", )
 
 
+module.exports = router
+
+
+/*
 GET /checkout/
 Displays the checkout page for the user with his sessionID
     renders the checkout.ejs
