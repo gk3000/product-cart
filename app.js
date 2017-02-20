@@ -1,6 +1,11 @@
 var express = require('express');
 var app = express();
 
+<<<<<<< HEAD
+=======
+app.set('view engine', 'ejs')
+
+>>>>>>> b8446a6149aad6b088b897e94344e6c5d9ede437
 // DUMMY EVENTS
 var events = [
 	{
@@ -19,16 +24,27 @@ var events = [
 		eventName: 'JavaScript Full-Stack Bootcamp',
 		eventDetails: '8 weeks, Monday to Friday, from 9:00 till you drop',
 		startDate: '22/05/2017',
+<<<<<<< HEAD
 		endDate '14/07/17',
 		subjects: ['Node.js', 'express.js', 'mongoDB']
+=======
+		endDate: '14/07/17',
+		subjects: ['Node.js', 'express.js', 'mongoDB'],
+>>>>>>> b8446a6149aad6b088b897e94344e6c5d9ede437
 		eventType: ['Three month course'],
 		image: 'https://i2.wp.com/www.barcelonacodeschool.com/wp-content/uploads/2016/04/students-in-classroom.jpg?zoom=1.5&fit=564%2C388',
 		price: 3000
 	}
 ]
 
+<<<<<<< HEAD
 
 
+=======
+app.get('/', function(req, res) {
+	res.render('index');
+}
+>>>>>>> b8446a6149aad6b088b897e94344e6c5d9ede437
 
 app.listen(4001, function(){
 	console.log("running 4001")
