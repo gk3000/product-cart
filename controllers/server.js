@@ -8,6 +8,11 @@ const eventsCollection = mongoose.model("events")
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
+
+app.get('/' function(req, res){
+    res.redirect('/events')
+})
+
 router.get("/events", function(req, res){
     eventsCollection.find({}, (err, records) =>{ 
     	if (err) {
