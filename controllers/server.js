@@ -41,7 +41,7 @@ router.get ("/events/:id", function (req, res) {
 // creates session ID
 // sends a cookie to the users browser
 router.post("/cart/:id", function(req, res){
-    sessionCollection.create({eventIDs: req.params.id}, (err, record) =>{
+    sessionCollection.create({eventIDs: [req.params.id]}, (err, record) =>{
         if (err) {
         	res.redirect("error")
         } else {
@@ -51,18 +51,34 @@ router.post("/cart/:id", function(req, res){
 })
 
 
-
-
-
-
 /*
 GET /cart
+checks cookie first
 Displays the cart page with selected events
     renders the cart.ejs
 args: get, sessionID
 User can proceed to the checkout page 
 */
-router.get("/cart", )
+router.get("/cart", (req, res, next) => {
+	// if session (from req.cookies.sessionID) exists 
+	allSessions.findOne({ _id: req.cookies.sessionID}, (err, rec) => {
+		console.log("------------------------------", rec)
+		if (err) {
+					console.log("--------------AUTH ERROR----------------")
+			res.redirect("/login")
+		} else if (!rec) {
+								console.log("--------------AUTH USER NOT FOUND----------------")
+			res.redirect("/login")
+		} else {
+			res.send("you are signed in and thus you can access this route")
+			}
+			next()
+		})
+	
+	})
+
+
+
 
 
 module.exports = router
