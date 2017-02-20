@@ -1,0 +1,114 @@
+Controllers API 
+
+CONTROLLERS/SERVER.JS
+
+    GET /events   
+        - displays all events
+        - passes object ('events') that contains all events from the db
+        - contains 'add to cart' and 'read more' buttons that redirect to POST cart/:id and /events/:id, respectively
+        - renders index.ejs
+
+    GET /events/:id
+        - displays a single event
+        - passes object ('event') that contains information about the event that matches the :id param
+        - renders show.ejs
+
+    GET /cart
+        - displays the events the client has selected
+        - allows the client to edit the selected tickets, i.e. add and remove them from the cart
+        - information about selected tickets and the client is stored in an object ('session')
+        - after editing, the client proceeds to /checkout via button
+        - renders cart.ejs
+
+    POST /cart/:id
+        - creates new session object
+        - adds event reference to session object
+        - creates new cookie with sessionID equal to :id
+        - redirects to /cart
+
+    POST /cart/update
+        - displays the updated cart, with values specified by client at get:cart
+        - renders cart.ejs with updated values
+
+    POST /cart/remove
+        - removes all selected tickets from cart
+        - rerenders cart without any items
+
+    GET /checkout
+        - displays checkout page
+        - information about the client and the purchase is passed through the 'session' object
+        - the client can choose between multiple payment options, and will be redirected
+        - renders checkout.ejs
+
+    POST /checkout
+        - checks if terms & conditions are checked
+        - saves billing details in the db
+        - redirects to website where payment will be made (e.g. PayPal)
+        - renders confirmation.ejs
+
+VIEWS
+    /PARTIALS
+        header.ejs
+        - contains header, menu and links to stylesheets
+
+        footer.ejs
+        - contains footer
+
+    index.ejs
+    - Shows all events. They are clickable.
+
+    show.ejs
+    - Shows a single event with more information.
+
+    cart.ejs
+    - Shows all the user's selected events
+    - Allows user to remove and edit items before checkout
+
+    checkout.ejs
+    - Allows the user to choose payment method
+
+    confirmation.ejs
+    - Displays that the purchase has been successfully made
+
+    error.ejs
+    - Displays errors
+
+
+MONGOOSE API
+
+1) Mongoose Database:
+    eventSchema:
+       args: create a record of event
+       return: true if successful false if not
+        it tries save and tells you if it worked
+    eventSchema:
+        args: view the evnets with full datails
+   Update:
+        args: update event with changes
+   Remove:
+        args: remove the event after end date
+ 
+2) Structure of eventSchema:
+    {
+        eventName: String,
+        startDate: Date,
+        endDate: Date,
+        time: String,
+        subjects: [String],
+        eventType: [String],
+        image: Sting,
+        eventDetails: String,
+        price: Number
+    }
+   
+3) Structure of sessionSchema:
+
+   {
+     eventIDs: [ // array of object IDs
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Event"
+        }
+    ],
+    sessionID: String      
+   }
