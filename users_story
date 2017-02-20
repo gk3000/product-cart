@@ -16,7 +16,7 @@ Cart page
 
 Checkout page
 	Fills out billing address
-	If shipping address is different fils out the shipping address
+	If shipping address is different fills out the shipping address
 	Selects a payment method
 	Agrees to the terms & conditions
 	Proceed with the order
