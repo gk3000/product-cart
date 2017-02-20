@@ -1,9 +1,8 @@
 var express = require('express'),
     app = express();
 const router = express.Router()
-const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://localhost/product-cart')
+app.set('view engine', 'ejs')
 
 // connect to our model with assigned variable to use inside the controller
 // const eventsCollection = mongoose.model("events");
@@ -39,12 +38,16 @@ var events = [
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
+app.get('/', function(req, res) {
+    res.render('index', {events})
+})
+
 router.get("/events", function(req, res){
     eventsCollection.find({}, (err, records) =>{ 
     	if (err) {
     		res.redirect("error")
     	} else {
-        res.render("index", {allEvents: records, events}) 
+        res.render("index", {allEvents: records}) 
 	    }
     })
      
@@ -96,7 +99,6 @@ Displays the cart page with selected events
 args: get, sessionID
 User can proceed to the checkout page 
 */
-router.get("/cart", )
 
 
 module.exports = router
