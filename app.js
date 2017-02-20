@@ -19,15 +19,13 @@ var events = [
 		eventName: 'JavaScript Full-Stack Bootcamp',
 		eventDetails: '8 weeks, Monday to Friday, from 9:00 till you drop',
 		startDate: '22/05/2017',
-		endDate '14/07/17',
-		subjects: ['Node.js', 'express.js', 'mongoDB']
+		endDate: '14/07/17',
+		subjects: ['Node.js', 'express.js', 'mongoDB'],
 		eventType: ['Three month course'],
 		image: 'https://i2.wp.com/www.barcelonacodeschool.com/wp-content/uploads/2016/04/students-in-classroom.jpg?zoom=1.5&fit=564%2C388',
 		price: 3000
 	}
 ]
-
-
 
 
 app.listen(4001, function(){

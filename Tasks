@@ -1,0 +1,51 @@
+TASKS
+
+BACKEND
+1. Create index page which contains all events
+	app.get('/')
+	needs to pass all events to ejs file
+	render index.ejs
+
+2. Create show page for single event
+	app.get('events/:id')
+	needs to pass the id to the ejs file
+	render show.ejs
+
+FRONTEND
+1. Create index.ejs
+	shows all events
+
+2. Create show.ejs
+	shows single clicked event
+
+--------------------------------------------------------------------------
+
+3. Create event schema
+	eventName: String,
+	startDate: Date,
+	endDate: Date,
+	time: 
+	subjects: String,
+	eventType: String,
+	image: Sting,
+	eventDetails: String,
+	price: Number
+
+4. Create form page
+	app.get('events/create')
+	render('create.ejs')
+	needs to have: 
+		eventName: String,
+		startDate: Date,
+		endDate: Date,
+		time: 
+		subjects: String,
+		eventType: String,
+		image: Sting,
+		eventDetails: String,
+		price: Number
+		Submit putton
+
+5. Post new event
+	(app.get('/events/create'))
+	add new event to DB
