@@ -1,6 +1,3 @@
-var express = require('express');
-var app = express();
-
 // DUMMY EVENTS
 var events = [
 	{
@@ -26,10 +23,3 @@ var events = [
 		price: 3000
 	}
 ]
-
-
-
-
-app.listen(4001, function(){
-	console.log("running 4001")
-})
