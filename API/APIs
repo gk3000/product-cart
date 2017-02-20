@@ -1,3 +1,4 @@
+
 Controllers API 
 
 CONTROLLERS/SERVER.JS
@@ -77,41 +78,6 @@ VIEWS
 
 MONGOOSE API
 
-1) Mongoose Database:
-    eventSchema:
-       args: create a record of event
-       return: true if successful false if not
-        it tries save and tells you if it worked
-    eventSchema:
-        args: view the evnets with full datails
-   Update:
-        args: update event with changes
-   Remove:
-        args: remove the event after end date
- 
-2) Structure of eventSchema:
-    {
-        eventName: String,
-        startDate: Date,
-        endDate: Date,
-        time: String,
-        subjects: [String],
-        eventType: [String],
-        image: Sting,
-        eventDetails: String,
-        price: Number
-    }
-   
-3) Structure of sessionSchema:
-
-   {
-     eventIDs: [ // array of object IDs
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Event"
-        }
-    ]  
-   }
 
 
 
@@ -130,18 +96,16 @@ MONGOOSE API
 
         }
 
-    connect
-        estalish mongo connection
-        take a callback // err first callback convention
-        connects to mongo, executes callback, sends error if fail
+Structure of sessionSchema:
 
-    disconnect
-        disconnects from mongo
-        takes a callback
-        disconnects, ececutes callback, sens error if fail
-
-        Model API:
-
+   {
+     eventIDs: [ // array of object IDs
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Event"
+        }
+    ]  
+   }
  
  model.getAll(CB):
     takes a callback
