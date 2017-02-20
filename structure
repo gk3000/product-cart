@@ -24,5 +24,8 @@ Checkout page
 	Billing details
 	Order content
 	Payment options
+		Stripe
+		Paypal
+		Direct bank transfer
 	Agree to terms and conditions
 	Pay button -> payment gateways
