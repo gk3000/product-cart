@@ -5,7 +5,9 @@ Controllers API
 
 GET /events   
 Displays the events calendar page
+    fetches all the records from the events collection and passes it to the view in "allEvents" variable
     renders the index.ejs view
+
 
 GET /events/:id
 Displays the  selected single event page
@@ -69,6 +71,9 @@ VIEWS API
 
 
 
+
+
+MONGOOSE API
 
 1)Mongoose Database
     event Schema
