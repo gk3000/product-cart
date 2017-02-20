@@ -39,8 +39,16 @@ var events = [
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
+app.get('/calendar', function(req, res){
+    res.render('index')
+})
 
-app.get('/' function(req, res){
+
+
+
+
+
+app.get('/', function(req, res){
     res.redirect('/events')
 })
 
@@ -101,7 +109,7 @@ Displays the cart page with selected events
 args: get, sessionID
 User can proceed to the checkout page 
 */
-router.get("/cart", )
+router.get("/cart")
 
 
 module.exports = router
