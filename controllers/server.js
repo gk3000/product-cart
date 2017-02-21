@@ -5,14 +5,34 @@ const router = express.Router()
 app.set('view engine', 'ejs')
 
 var sessionsDB = require('model')
-sessionsDB.setSchema({describe schema})
+sessionsDB.setSchema(   {
+     eventIDs: [ // array of object IDs
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Event"
+        }
+    ],
+    sessionID: String      
+   })
 
 var eventsDB = require('model')
-eventsDB.setSchema({})
+eventsDB.setSchema({
+        eventName: String,
+        startDate: Date,
+        endDate: Date,
+        time: String,
+        subjects: [String],
+        eventType: [String],
+        image: Sting,
+        eventDetails: String,
+        price: Number
+    })
 
 var usersDB = require('model')
-usersDB.setSchema({describe schema})
+usersDB.setSchema({})
 
+eventsDB.save({new user}, (err) => {});
+sessionsDB.save({new user}, (err) => {});
 usersDB.save({new user}, (err) => {});
 
 
@@ -51,7 +71,7 @@ var events = [
 Displays the events calendar page
     renders the index.ejs view */
 router.get("/events", function(req, res){
-    eventsCollection.getAll( (err, records) =>{ 
+    eventsDB.getAll( (err, records) =>{ 
     	if (err) {
     		res.redirect("error", err)
     	} else {
@@ -66,7 +86,7 @@ Displays the  selected single event page
     renders the show.ejs
 */
 router.get ("/events/:id", function (req, res) {
-	eventsCollection.getOne(req.params.id, (err, record) => {
+	eventsDB.getOne(req.params.id, (err, record) => {
 		if (err) {
 			res.redirect("error", err)
 		} else {
@@ -84,7 +104,7 @@ POST /cart/:id
 - redirects to /cart
 */
 router.post("/cart/:id", function(req, res){
-    sessionCollection.save({eventIDs: [req.params.id]}, (err, record) =>{
+    sessionsDB.save({eventIDs: [req.params.id]}, (err, record) =>{
         if (err) {
         	res.redirect("error", err)
         } else {
@@ -102,7 +122,7 @@ GET /cart
 */
 router.get("/cart", (req, res) => {
 	// if session (from req.cookies.sessionID) exists 
-	allSessions.getOne(req.cookies.sessionID, (err, records) => {
+	sessionsDB.getOne(req.cookies.sessionID, (err, records) => {
 		if (err) {
 			res.redirect("error", err)
 		} else {
