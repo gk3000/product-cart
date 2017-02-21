@@ -17,14 +17,18 @@ model.type = function(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
 
-model.setSchema = function(newSchema) {
+model.setSchema = function(newSchema, cb) {
     this.schema = newSchema;
+    console.log('This after setSchema', this)
+    var err;
+    cb(err, newSchema);
 };
 
 model.validate = function(obj){
+    //console.log(obj)
     var schema = this.schema;
     var type = this.type;
-
+    //console.log('THIS:  ', this)
     var newObj ={}; 
     schemaKeys = Object.keys(schema)
     var err = {}
@@ -33,18 +37,16 @@ model.validate = function(obj){
 
     	if (schema[x].unique){
     		for (var ele of this.db) {
-    			if (this.db[ele][x] === obj[x]) {
-    				err.duplicate  = "Duplicate name: " + x
+    			if (ele[x] === obj[x]) {
+    				err.duplicate = "Duplicate name: " + x
     			}
     		} 
     	}
 
-    	console.log(schema[x].type, type(obj[x]))
+    	//console.log(schema[x].type, type(obj[x]))
         if(schema[x].type === type(obj[x])){
-        	console.log("passed first if")
         	  newObj[x]=obj[x];
             if  (schema[x].type === "array") {
-            	console.log("passed second if")
             	obj[x].forEach(function(y){
             		if (schema[x].subType = type(y)) {
                         newObj[x].push(y);
@@ -54,14 +56,12 @@ model.validate = function(obj){
 			}
         
         } else if (!obj[x] && schema[x].required === true) {
-        	console.log("passed else if")
         	return "Missing element from object"
         } else {
-        	console.log("passed else")
-            return "problem with object type"
+            return "problem with object type of " + x
         }
     };
-    console.log("reached end of function")
+    //console.log("reached end of function")
     return newObj
 }
 
@@ -85,8 +85,9 @@ model.getOne = function(obj, cb) {
     var objKey = Object.keys(obj);
     var objVal = obj[objKey];
     var foundObj = null;
+    var type = this.type;
     
-    if (type(id) !== 'object') {
+    if (type(obj) !== 'object') {
         var err = 'Missing obj argument'
         cb(err);
     } else {
@@ -115,7 +116,7 @@ model.save = function(obj, cb) {
     	this.currentID++; 
     	successMessage = 'saved new object'   	
     } else {
-    	err = validate(obj);
+    	err = this.validate(obj);
     }
     cb(err, successMessage);
 }
