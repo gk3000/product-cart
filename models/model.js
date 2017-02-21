@@ -1,20 +1,3 @@
-//actual schema of events
-    schema
-        
-        {
-            eventName:{ type : String,required : true}// is required, is unique
-            startDate : Date// is required
-            endDate : Date// is required
-            time : String  // is required
-            subjects : String  // is required
-            eventType : String // is required
-            image : String // is required
-            eventDetails : String // is required
-            price : Number  // is required
-
-        }
-
-
 // this object is your mongoose
 var model = {};
 // your mongoDB
@@ -29,37 +12,113 @@ model.currentID = 0;
 //     takes a callback and an object
 //     sets model.schema to schema
 //     executes callback with array if successful, with error if not
-model.setSchema = function(newSchema, cb) {
-    var err;
-    var successMessage;
+
+model.type = function(obj) {
+        return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    }
+
+model.setSchema = function(newSchema) {
     this.schema = newSchema;
-    cb(err, successMessage);
 };
+
+model.validate = function(obj){
+    var schema = this.schema;
+    var type = this.type;
+
+    var newObj ={}; 
+    schemaKeys = Object.keys(schema)
+    var err = {}
+
+    for (var x in schema) {
+
+    	if (schema[x].unique){
+    		for (var ele of this.db) {
+    			if (this.db[ele][x] === obj[x]) {
+    				err.duplicate  = "Duplicate name: " + x
+    			}
+    		} 
+    	}
+
+    	console.log(schema[x].type, type(obj[x]))
+        if(schema[x].type === type(obj[x])){
+        	console.log("passed first if")
+        	  newObj[x]=obj[x];
+            if  (schema[x].type === "array") {
+            	console.log("passed second if")
+            	obj[x].forEach(function(y){
+            		if (schema[x].subType = type(y)) {
+                        newObj[x].push(y);
+                    }
+            	})
+                    	
+			}
+        
+        } else if (!obj[x] && schema[x].required === true) {
+        	console.log("passed else if")
+        	return "Missing element from object"
+        } else {
+        	console.log("passed else")
+            return "problem with object type"
+        }
+    };
+    console.log("reached end of function")
+    return newObj
+}
+
 // model.getAll(CB):
 //     takes a callback
 //     retrieves all objects into an array
 //     executes callback with array if successful, with error if not
 model.getAll = function(cb) {
-    var err;
-    
+    var err = null;
     cb(err, this.db);
 };
+
 //  model.getOne(ID, CB):
 //     takes a callback and an ID
 //     retrieves the object with that ID
 //     executes callback with object if successful, with error if not
-model.getOne = function(id, cb) {
+
+
+model.getOne = function(obj, cb) {
     var err = null;
+    var objKey = Object.keys(obj);
+    var objVal = obj[objKey];
+    var foundObj = null;
     
-    var sentObj = {};
+    if (type(id) !== 'object') {
+        var err = 'Missing obj argument'
+        cb(err);
+    } else {
+        for (var ele of this.db) {
+            if (ele[objKey] === objVal) {
+                cb(err, ele);
+            }
+        }
+    }
     // logic that selects the right oject from the db
-    // assign it to sentObj 
-    cb(err, sentObj);
+    // assign it to sentObj;
 };
 //  model.save(obj, CB):
 //     takes a callback and a new object
 //     attempts to save object to database
 //     executes callback with error or success status
+
+model.save = function(obj, cb) {
+    var err;
+    var successMessage;
+    var validated = this.type(this.validate(obj)) === 'object';
+
+    if (validated) {
+	    obj.id = this.currentID;
+    	this.db.push(obj); 
+    	this.currentID++; 
+    	successMessage = 'saved new object'   	
+    } else {
+    	err = validate(obj);
+    }
+    cb(err, successMessage);
+}
 
 //  model.delete(ID, CB):
 //     takes a callback and an ID
@@ -87,4 +146,5 @@ model.update = function(id, newObj, cb) {
     this.db.push(newObj); 
     cb(err, successMessage);
 };
-module.export = model;
+
+module.exports = model;
