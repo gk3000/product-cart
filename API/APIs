@@ -43,9 +43,6 @@ CONTROLLERS/SERVER.JS
         - redirects to website where payment will be made (e.g. PayPal)
         - renders confirmation.ejs
 
-    GET /confirmation
-    ...
-
 VIEWS
     /PARTIALS
         header.ejs

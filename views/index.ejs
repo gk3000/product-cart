@@ -1,5 +1,27 @@
 <% include partials/header %>
 
-<button class="btn btn-default">BUTTON</button>
+<%= $('h2') %>
+
+<div class="row">
+	<% events.forEach(function(event) { %>
+		<div class="col-md-6">
+			<div class="thumbnail">
+				<img class="img-responsive" src="<%= event.image %>">
+				<h2><%= event.eventName %></h2>
+				<% event.subjects.forEach(function(subject) { %>
+					<div class="label label-default"><%= subject %></div>
+				<% }) %>
+				<% event.eventType.forEach(function(type){ %>
+					<div class="label label-info"><%= type %></div>
+					<% }) %>
+				<p class="pull-right"><strong>Price: </strong>€<%= event.price %></p>
+				<hr>
+				<p><%= event.eventDetails.slice(0, 100) %>...</p>
+				<a class="btn btn-primary" href="/cart">Add to cart</a>
+				<a class="btn btn-default" action="/events/<%= event._id %>">Learn more</a>
+			</div>
+		</div>
+	<% }) %>
+</div>
 
 <% include partials/footer %>
