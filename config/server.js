@@ -1,7 +1,9 @@
+
 var express = require('express')
+var app = express()
 const router = express.Router()
 const mongoose = require("mongoose")
-var app = express()
+
 
 // Set view engine folder
 app.set('view engine', 'ejs')
@@ -15,8 +17,6 @@ app.use(bodyParser.json())
 // Access cookies as objects
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
-
-const router = express.Router()
 
 // public assets
 app.use('/public', express.static('public'))

@@ -1,5 +1,5 @@
 var express = require('express'),
-    app = express();
+app = express();
 const router = express.Router()
 const mongoose = require("mongoose")
 
@@ -110,15 +110,17 @@ var events = [
     }
 ]
 
+
+
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
 router.get("/events", function(req, res){
     eventsDB.getAll( (err, records) =>{ 
     	if (err) {
-    		res.redirect("error", err)
+    		res.render("error", {err})
     	} else {
-        res.render("../views/index", {events: records}) 
+        res.render("../views/index", {events}) 
 	    }} )
      
 })
@@ -131,7 +133,7 @@ Displays the  selected single event page
 router.get ("/events/:id", function (req, res) {
 	eventsDB.getOne(req.params.id, (err, record) => {
 		if (err) {
-			res.redirect("error", err)
+			res.render("error", err)
 		} else {
 			res.render("../views/show", {event: record})
 		}
@@ -186,7 +188,9 @@ args: get, sessionID
 
 
 module.exports = router
-
+// app.listen(4001, function() {
+//     console.log("---------------listening in port 4001--------------")
+// })
 
 
 /*

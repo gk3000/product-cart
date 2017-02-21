@@ -1,14 +1,13 @@
-var express = require('express');
-var app = express();
-
-app.set('view engine', 'ejs')
-
-
 // Initialize server
 require("./config/db")
 
 // Initialize models
 require("./config/server")
+
+var express = require('express');
+var app = express();
+
+app.set('view engine', 'ejs')
 
 // DUMMY EVENTS
 var events = [
