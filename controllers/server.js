@@ -133,8 +133,6 @@ renders the checkout.ejs
 args: get, sessionID
 */
 
-
-
 module.exports = router;
 
 
