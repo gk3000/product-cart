@@ -4,36 +4,28 @@ const router = express.Router()
 
 app.set('view engine', 'ejs')
 
-var sessionsDB = require('../models/model')
-sessionsDB.setSchema(   {
-     eventIDs: [ // array of object IDs
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Event"
-        }
-    ],
-    sessionID: String      
-   })
 
-var eventsDB = require('../models/model')
-eventsDB.setSchema({
-        eventName: String,
-        startDate: Date,
-        endDate: Date,
-        time: String,
-        subjects: [String],
-        eventType: [String],
-        image: Sting,
-        eventDetails: String,
-        price: Number
-    })
+// SCHEMAS
+var Events = require("../models/model.js")
+Events.setSchema({
+    name: {type: "string", required: true, unique: true},
+    startDate : {type: "date", required: true}, 
+    endDate : {type: "date", required: true}, 
+    time : {type: "date", required: true},  
+    subjects : {type: "array", subType: "string", required: true},  
+    eventType : {type: "array", subType: "string", required: true} ,
+    image :  {type :"string", required: true},
+    details :{type :"string", required: true}, 
+    price : {type :"number", required: true}  
+})
 
-var usersDB = require('../models/model')
-usersDB.setSchema({})
+var Sessions = require("../models/model")
+Sessions.setSchema({
+    eventIDs: {type: "array", subType: "string"}
+})
 
-eventsDB.save({}, (err) => {});
-sessionsDB.save({}, (err) => {});
-usersDB.save({}, (err) => {});
+var Shopping = require("../models/model")
+Shopping.setSchema({})
 
 
 // connect to our model with assigned variable to use inside the controller
@@ -71,13 +63,13 @@ var events = [
 Displays the events calendar page
     renders the index.ejs view */
 router.get("/events", function(req, res){
-    eventsDB.getAll( (err, records) =>{ 
+    Events.getAll( (err, events) =>{ 
     	if (err) {
-    		res.redirect("error", err)
+    		res.redirect("error", {err})
     	} else {
-        res.render("index", {events: records}) 
-	    }} )
-     
+            res.render("index", {events}) 
+	    }
+    })
 })
 
 /*
@@ -86,11 +78,11 @@ Displays the  selected single event page
     renders the show.ejs
 */
 router.get ("/events/:id", function (req, res) {
-	eventsDB.getOne(req.params.id, (err, record) => {
+	Events.getOne({id: req.params.id}, (err, event) => {
 		if (err) {
 			res.redirect("error", err)
 		} else {
-			res.render("show", {event: record})
+			res.render("show", {event})
 		}
 	})
 })
@@ -104,11 +96,12 @@ POST /cart/:id
 - redirects to /cart
 */
 router.post("/cart/:id", function(req, res){
-    sessionsDB.save({eventIDs: [req.params.id]}, (err, record) =>{
+    Sessions.save({eventIDs: [req.params.id]}, (err, session) =>{
         if (err) {
-        	res.redirect("error", err)
+        	res.redirect("error", {err})
         } else {
-        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+            res.cookie('sessionID', session.id, { maxAge: 9000000000, httpOnly: false })
+            res.render('cart', {session})
         }
     }) 
 })
@@ -122,12 +115,12 @@ GET /cart
 */
 router.get("/cart", (req, res) => {
 	// if session (from req.cookies.sessionID) exists 
-	sessionsDB.getOne(req.cookies.sessionID, (err, records) => {
+	Sessions.getOne({id: req.cookies.sessionID}, (err, session) => {
 		if (err) {
-			res.redirect("error", err)
+			res.redirect("error", {err})
 		} else {
 			//display cart with event associated to the current user
-			res.render("cart", records)
+			res.render("cart", {session})
 		}
 	})
 
@@ -142,7 +135,7 @@ args: get, sessionID
 
 
 
-module.exports = router
+module.exports = router;
 
 
 

@@ -79,10 +79,6 @@ model.getAll = function(cb) {
 //     retrieves the object with that ID
 //     executes callback with object if successful, with error if not
 
-findById
-
-findOne
-
 
 model.getOne = function(obj, cb) {
     var err = null;
@@ -122,6 +118,7 @@ model.save = function(obj, cb) {
     	err = validate(obj);
     }
     cb(err, successMessage);
+}
 
 //  model.delete(ID, CB):
 //     takes a callback and an ID
@@ -150,4 +147,4 @@ model.update = function(id, newObj, cb) {
     cb(err, successMessage);
 };
 
-module.export = model;
+module.exports = model;
