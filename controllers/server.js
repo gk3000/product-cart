@@ -4,6 +4,38 @@ const router = express.Router()
 
 app.set('view engine', 'ejs')
 
+var sessionsDB = require('model')
+sessionsDB.setSchema(   {
+     eventIDs: [ // array of object IDs
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Event"
+        }
+    ],
+    sessionID: String      
+   })
+
+var eventsDB = require('model')
+eventsDB.setSchema({
+        eventName: String,
+        startDate: Date,
+        endDate: Date,
+        time: String,
+        subjects: [String],
+        eventType: [String],
+        image: Sting,
+        eventDetails: String,
+        price: Number
+    })
+
+var usersDB = require('model')
+usersDB.setSchema({})
+
+eventsDB.save({new user}, (err) => {});
+sessionsDB.save({new user}, (err) => {});
+usersDB.save({new user}, (err) => {});
+
+
 // connect to our model with assigned variable to use inside the controller
 // const eventsCollection = mongoose.model("events");
 // const sessionCollection = mongoose.model("sessions")
@@ -38,18 +70,13 @@ var events = [
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
-app.get('/', function(req, res) {
-    res.render('index', {events})
-})
-
 router.get("/events", function(req, res){
-    eventsCollection.find({}, (err, records) =>{ 
+    eventsDB.getAll( (err, records) =>{ 
     	if (err) {
-    		res.redirect("error")
+    		res.redirect("error", err)
     	} else {
-        res.render("index", {allEvents: records}) 
-	    }
-    })
+        res.render("index", {events: records}) 
+	    }} )
      
 })
 
@@ -59,28 +86,27 @@ Displays the  selected single event page
     renders the show.ejs
 */
 router.get ("/events/:id", function (req, res) {
-	eventsCollection.findOne({_id: req.params.id }, (err, record) => {
+	eventsDB.getOne(req.params.id, (err, record) => {
 		if (err) {
-			res.redirect("error")
+			res.redirect("error", err)
 		} else {
 			res.render("show", {event: record})
 		}
 	})
 })
 
-app.listen(4001, function() {
-    console.log('Listening on port 4001!')
-})
 
-
-// POST /cart
-// adds product to cart
-// creates session ID
-// sends a cookie to the users browser
+/*
+POST /cart/:id
+- creates new session object
+- adds event reference to session object
+- creates new cookie with sessionID equal to session._id
+- redirects to /cart
+*/
 router.post("/cart/:id", function(req, res){
-    sessionCollection.create({eventIDs: req.params.id}, (err, record) =>{
+    sessionsDB.save({eventIDs: [req.params.id]}, (err, record) =>{
         if (err) {
-        	res.redirect("error")
+        	res.redirect("error", err)
         } else {
         res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
         }
@@ -88,28 +114,39 @@ router.post("/cart/:id", function(req, res){
 })
 
 
+/*    
+GET /cart
+- displays the events the client has selected
+- information about selected tickets and the client is stored in an object ('session')
+- renders cart.ejs
+*/
+router.get("/cart", (req, res) => {
+	// if session (from req.cookies.sessionID) exists 
+	sessionsDB.getOne(req.cookies.sessionID, (err, records) => {
+		if (err) {
+			res.redirect("error", err)
+		} else {
+			//display cart with event associated to the current user
+			res.render("cart", records)
+		}
+	})
 
-
-
+})
 
 /*
-GET /cart
-Displays the cart page with selected events
-    renders the cart.ejs
+GET /checkout/
+Displays the checkout page for the user with his sessionID
+renders the checkout.ejs
 args: get, sessionID
-User can proceed to the checkout page 
 */
+
 
 
 module.exports = router
 
 
-/*
-GET /checkout/
-Displays the checkout page for the user with his sessionID
-    renders the checkout.ejs
-args: get, sessionID
 
+/*
 POST /cart/update
 Cart page with update the quantity of products
     renders the cart.ejs
@@ -126,7 +163,7 @@ Cart page with apply the coupon option to get a discount
 args: get, coupon, discoun
 
 POST /checkout/pay
-arge: post, sessionID
+args: post, sessionID
 – saves users billing details in the database
 – check if the terms & conditions are checked
 – redirects to/process the payment

@@ -43,9 +43,6 @@ CONTROLLERS/SERVER.JS
         - redirects to website where payment will be made (e.g. PayPal)
         - renders confirmation.ejs
 
-    GET /confirmation
-    ...
-
 VIEWS
     /PARTIALS
         header.ejs
@@ -81,31 +78,10 @@ MONGOOSE API
 
 
 
-    schema
-        
-        {
-            eventName: type  String// is required, is unique
-            startDate: type  String// is required
-            endDate: type  String// is required
-            time : type String  // is required
-            subjects:type String  // is required
-            eventType: typeString // is required
-            image: typeSting // is required
-            eventDetails: typeString // is required
-            price: typeNumbertype  // is required
-
-        }
-
-Structure of sessionSchema:
-
-   {
-     eventIDs: [ // array of object IDs
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Event"
-        }
-    ]  
-   }
+ model.setSchema(schema, cb):
+    takes a schema and a callback
+    sets this database's schema to schema
+    executes callback with failure or success message
  
  model.getAll(CB):
     takes a callback
@@ -127,7 +103,7 @@ Structure of sessionSchema:
     attempts to delete item from DB
     executes callback with error or success status
 
- model.update(ID, newPropAndValue, cb):
+ model.update(ID, newObj, cb):
     takes a callback and an id and a new property  
     attempts to update existing object
     executes callback with error or success status
