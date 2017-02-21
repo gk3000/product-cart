@@ -1,10 +1,15 @@
 var express = require('express'),
     app = express();
 const router = express.Router()
+const mongoose = require("mongoose")
 
 app.set('view engine', 'ejs')
 
-var sessionsDB = require('model')
+// calling the model
+// var sessionsDB = require('../models/model')
+
+// calling the dummy model
+var sessionsDB = require('../models/dummyModel')
 sessionsDB.setSchema(   {
      eventIDs: [ // array of object IDs
         {
@@ -13,9 +18,20 @@ sessionsDB.setSchema(   {
         }
     ],
     sessionID: String      
-   })
+   },
+   (err, statement) => {
+        if(err) {
+            console.log("Error setting the sessions schema")
+        } else {
+            console.log("Success setting the sessions schema")
+        }
+   }
+   )
 
-var eventsDB = require('model')
+// calling the model
+// var eventsDB = require('../models/model')
+// calling the dummy model
+var eventsDB = require('../models/dummyModel')
 eventsDB.setSchema({
         eventName: String,
         startDate: Date,
@@ -23,17 +39,44 @@ eventsDB.setSchema({
         time: String,
         subjects: [String],
         eventType: [String],
-        image: Sting,
+        image: String,
         eventDetails: String,
         price: Number
-    })
+    },(err, statement) => {
+        if(err) {
+            console.log("Error setting the events schema")
+        } else {
+            console.log("Success setting the events schema")
+        }
+   })
 
-var usersDB = require('model')
-usersDB.setSchema({})
+// calling the model
+// var usersDB = require('../models/model')
+// calling the dummy model
+var usersDB = require('../models/dummyModel')
+usersDB.setSchema({
+        firstName: String,
+        lastName: String,
+        NIF: String,
+        companyName: String,
+        emailAddress: String,
+        phoneNumber: Number,
+        country: String,
+        address: String,
+        postcode: String,
+        city: String,
+        province: String
+    },(err, statement) => {
+        if(err) {
+            console.log("Error setting the users schema")
+        } else {
+            console.log("Success setting the users schema")
+        }
+   })
 
-eventsDB.save({new user}, (err) => {});
-sessionsDB.save({new user}, (err) => {});
-usersDB.save({new user}, (err) => {});
+eventsDB.save({}, (err) => {});
+sessionsDB.save({}, (err) => {});
+usersDB.save({}, (err) => {});
 
 
 // connect to our model with assigned variable to use inside the controller
@@ -75,7 +118,7 @@ router.get("/events", function(req, res){
     	if (err) {
     		res.redirect("error", err)
     	} else {
-        res.render("index", {events: records}) 
+        res.render("../views/index", {events: records}) 
 	    }} )
      
 })
@@ -90,7 +133,7 @@ router.get ("/events/:id", function (req, res) {
 		if (err) {
 			res.redirect("error", err)
 		} else {
-			res.render("show", {event: record})
+			res.render("../views/show", {event: record})
 		}
 	})
 })
@@ -144,9 +187,7 @@ args: get, sessionID
 
 module.exports = router
 
-app.listen(4001, function() {
-    console.log('Listening on port 4001!')
-})
+
 
 /*
 POST /cart/update
