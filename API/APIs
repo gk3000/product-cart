@@ -1,3 +1,4 @@
+
 Controllers API 
 
 CONTROLLERS/SERVER.JS
@@ -42,9 +43,6 @@ CONTROLLERS/SERVER.JS
         - redirects to website where payment will be made (e.g. PayPal)
         - renders confirmation.ejs
 
-    GET /confirmation
-    ...
-
 VIEWS
     /PARTIALS
         header.ejs
@@ -77,32 +75,25 @@ VIEWS
 
 MONGOOSE API
 
-1) Mongoose Database:
-    eventSchema:
-       args: create a record of event
-       return: true if successful false if not
-        it tries save and tells you if it worked
-    eventSchema:
-        args: view the evnets with full datails
-   Update:
-        args: update event with changes
-   Remove:
-        args: remove the event after end date
- 
-2) Structure of eventSchema:
-    {
-        eventName: String,
-        startDate: Date,
-        endDate: Date,
-        time: String,
-        subjects: [String],
-        eventType: [String],
-        image: Sting,
-        eventDetails: String,
-        price: Number
-    }
-   
-3) Structure of sessionSchema:
+
+
+
+    schema
+        
+        {
+            eventName: type  String// is required, is unique
+            startDate: type  String// is required
+            endDate: type  String// is required
+            time : type String  // is required
+            subjects:type String  // is required
+            eventType: typeString // is required
+            image: typeSting // is required
+            eventDetails: typeString // is required
+            price: typeNumbertype  // is required
+
+        }
+
+Structure of sessionSchema:
 
    {
      eventIDs: [ // array of object IDs
@@ -112,3 +103,28 @@ MONGOOSE API
         }
     ]  
    }
+ 
+ model.getAll(CB):
+    takes a callback
+    retrieves all objects into an array
+    executes callback with array if successful, with error if not
+
+ model.getOne(ID, CB):
+    takes a callback and an ID
+    retrieves the object with that ID
+    executes callback with object if successful, with error if not
+
+ model.save(obj, CB):
+    takes a callback and a new object
+    attempts to save object to database
+    executes callback with error or success status
+
+ model.delete(ID, CB):
+    takes a callback and an ID
+    attempts to delete item from DB
+    executes callback with error or success status
+
+ model.update(ID, newPropAndValue, cb):
+    takes a callback and an id and a new property  
+    attempts to update existing object
+    executes callback with error or success status
