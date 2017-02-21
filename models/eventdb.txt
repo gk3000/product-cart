@@ -1,0 +1,53 @@
+
+ 	schema
+	 	
+	 	{
+	 		eventName: type  String// is required, is unique
+	 		startDate: type  String// is required
+	 		endDate: type  String// is required
+	 		time : type String  // is required
+	 		subjects:type String  // is required
+		 	eventType: typeString // is required
+		 	image: typeSting // is required
+		 	eventDetails: typeString // is required
+		 	price: typeNumbertype  // is required
+
+	 	}
+
+ 	connect
+ 		estalish mongo connection
+ 		take a callback // err first callback convention
+ 		connects to mongo, executes callback, sends error if fail
+
+ 	disconnect
+ 		disconnects from mongo
+ 		takes a callback
+ 		disconnects, ececutes callback, sens error if fail
+
+ 		Model API:
+
+ 
+ model.getAll(CB):
+    takes a callback
+    retrieves all objects into an array
+    executes callback with array if successful, with error if not
+
+ model.getOne(ID, CB):
+    takes a callback and an ID
+    retrieves the object with that ID
+    executes callback with object if successful, with error if not
+
+ model.save(obj, CB):
+    takes a callback and a new object
+    attempts to save object to database
+    executes callback with error or success status
+
+ model.delete(ID, CB):
+    takes a callback and an ID
+    attempts to delete item from DB
+    executes callback with error or success status
+
+ model.update(ID, newPropAndValue, cb):
+    takes a callback and an id and a new property  
+    attempts to update existing object
+    executes callback with error or success status
