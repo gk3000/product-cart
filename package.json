@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/gk3000/product-cart#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
     "express": "^4.14.1",
     "mongoose": "^4.8.4"
