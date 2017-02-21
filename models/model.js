@@ -1,22 +1,3 @@
-//actual schema of events
-
-    schema = {
-            name: {type: "string", required: true, unique: true}, // is required, is unique
-            startDate : {type: "date", required: false}, // is required
-            endDate : {type: "date", required: false}, // is required
-            time : {type: "date", required: false},  // is required
-            subjects : {type:  "array", subType: "string"},  // is required
-            eventType : {type: "array", subType: "string"} ,// is required
-            image :  {type :"string"},// is required
-            details :{type :"string"}, // is required
-            price : {type :"number"}  // is required
-        }
-        // does the object have extra properties
-        // does the object have all required properties
-        // if the schema designates a property as unique, is the object's unique in the database
-        // are all of the properties of the right type
-
-
 // this object is your mongoose
 var model = {};
 // your mongoDB
@@ -31,18 +12,18 @@ model.currentID = 0;
 //     takes a callback and an object
 //     sets model.schema to schema
 //     executes callback with array if successful, with error if not
-model.setSchema = function(newSchema, cb) {
-    var err;
-    var successMessage;
-    this.schema = newSchema;
-    cb(err, successMessage);
-};
 
-
-model.validate = function(obj, schema){
-    var type = function(obj) {
+model.type = function(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
+
+model.setSchema = function(newSchema) {
+    this.schema = newSchema;
+};
+
+model.validate = function(obj){
+    var schema = this.schema;
+    var type = this.type;
 
     var newObj ={}; 
     schemaKeys = Object.keys(schema)
@@ -57,7 +38,6 @@ model.validate = function(obj, schema){
     			}
     		} 
     	}
-
 
     	console.log(schema[x].type, type(obj[x]))
         if(schema[x].type === type(obj[x])){
@@ -90,21 +70,38 @@ model.validate = function(obj, schema){
 //     retrieves all objects into an array
 //     executes callback with array if successful, with error if not
 model.getAll = function(cb) {
-    var err;
-    
+    var err = null;
     cb(err, this.db);
 };
+
 //  model.getOne(ID, CB):
 //     takes a callback and an ID
 //     retrieves the object with that ID
 //     executes callback with object if successful, with error if not
-model.getOne = function(id, cb) {
+
+findById
+
+findOne
+
+
+model.getOne = function(obj, cb) {
     var err = null;
+    var objKey = Object.keys(obj);
+    var objVal = obj[objKey];
+    var foundObj = null;
     
-    var sentObj = {};
+    if (type(id) !== 'object') {
+        var err = 'Missing obj argument'
+        cb(err);
+    } else {
+        for (var ele of this.db) {
+            if (ele[objKey] === objVal) {
+                cb(err, ele);
+            }
+        }
+    }
     // logic that selects the right oject from the db
-    // assign it to sentObj 
-    cb(err, sentObj);
+    // assign it to sentObj;
 };
 //  model.save(obj, CB):
 //     takes a callback and a new object
@@ -114,14 +111,15 @@ model.getOne = function(id, cb) {
 model.save = function(obj, cb) {
     var err;
     var successMessage;
-    
-    if (this.validate(obj)) {
+    var validated = this.type(this.validate(obj)) === 'object';
+
+    if (validated) {
 	    obj.id = this.currentID;
     	this.db.push(obj); 
     	this.currentID++; 
     	successMessage = 'saved new object'   	
     } else {
-    	err = "problem with object type"
+    	err = validate(obj);
     }
     cb(err, successMessage);
 
@@ -151,4 +149,5 @@ model.update = function(id, newObj, cb) {
     this.db.push(newObj); 
     cb(err, successMessage);
 };
+
 module.export = model;
