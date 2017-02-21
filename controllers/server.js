@@ -4,7 +4,7 @@ const router = express.Router()
 
 app.set('view engine', 'ejs')
 
-var sessionsDB = require('model')
+var sessionsDB = require('../models/model')
 sessionsDB.setSchema(   {
      eventIDs: [ // array of object IDs
         {
@@ -15,7 +15,7 @@ sessionsDB.setSchema(   {
     sessionID: String      
    })
 
-var eventsDB = require('model')
+var eventsDB = require('../models/model')
 eventsDB.setSchema({
         eventName: String,
         startDate: Date,
@@ -28,12 +28,12 @@ eventsDB.setSchema({
         price: Number
     })
 
-var usersDB = require('model')
+var usersDB = require('../models/model')
 usersDB.setSchema({})
 
-eventsDB.save({new user}, (err) => {});
-sessionsDB.save({new user}, (err) => {});
-usersDB.save({new user}, (err) => {});
+eventsDB.save({}, (err) => {});
+sessionsDB.save({}, (err) => {});
+usersDB.save({}, (err) => {});
 
 
 // connect to our model with assigned variable to use inside the controller
