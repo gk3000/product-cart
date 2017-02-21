@@ -50,18 +50,6 @@ var events = [
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
-app.get('/calendar', function(req, res){
-    res.render('index')
-})
-
-
-
-
-
-app.get('/', function(req, res) {
-    res.render('index', {events})
-})
-
 router.get("/events", function(req, res){
     eventsCollection.getAll( (err, records) =>{ 
     	if (err) {
