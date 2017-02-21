@@ -1,4 +1,5 @@
 //actual schema of events
+
     schema = {
             name: {type: "string", required: true, unique: true}, // is required, is unique
             startDate : {type: "date", required: false}, // is required
@@ -14,6 +15,7 @@
         // does the object have all required properties
         // if the schema designates a property as unique, is the object's unique in the database
         // are all of the properties of the right type
+
 
 // this object is your mongoose
 var model = {};
@@ -35,6 +37,7 @@ model.setSchema = function(newSchema, cb) {
     this.schema = newSchema;
     cb(err, successMessage);
 };
+
 
 model.validate = function(obj, schema){
     var type = function(obj) {
@@ -81,7 +84,7 @@ model.validate = function(obj, schema){
     console.log("reached end of function")
     return newObj
 }
-                      
+
 // model.getAll(CB):
 //     takes a callback
 //     retrieves all objects into an array
@@ -107,6 +110,7 @@ model.getOne = function(id, cb) {
 //     takes a callback and a new object
 //     attempts to save object to database
 //     executes callback with error or success status
+
 model.save = function(obj, cb) {
     var err;
     var successMessage;
