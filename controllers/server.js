@@ -50,6 +50,14 @@ var events = [
 /*GET /events   
 Displays the events calendar page
     renders the index.ejs view */
+app.get('/calendar', function(req, res){
+    res.render('index')
+})
+
+
+
+
+
 app.get('/', function(req, res) {
     res.render('index', {events})
 })
@@ -60,14 +68,14 @@ router.get("/events", function(req, res){
     		res.redirect("error")
     	} else {
         res.render("index", {allEvents: records}) 
-<<<<<<< HEAD
-	    }} )
+
+	    } 
      
-=======
-	    }
+
+	    })
     })
->>>>>>> 8fac7c294939f31cc1c54f9827d38544d967c158
-})
+
+
 
 /*
 GET /events/:id
@@ -112,7 +120,7 @@ Displays the cart page with selected events
 args: get, sessionID
 User can proceed to the checkout page 
 */
-<<<<<<< HEAD
+
 router.get("/cart", (req, res, next) => {
 	// if session (from req.cookies.sessionID) exists 
 	allSessions.findOne({ _id: req.cookies.sessionID}, (err, rec) => {
@@ -127,10 +135,6 @@ router.get("/cart", (req, res, next) => {
 	
 	})
 
-
-
-=======
->>>>>>> 19e1b893c563784287e127c1c35573c8808f300d
 
 
 module.exports = router
