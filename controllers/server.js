@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const Model = require('../models/modelClass')
 
 app.set('view engine', 'ejs');
+
 // Creates new models with schema as argument
 var Sessions = new Model({
     eventIDs: {type: 'array', subType: 'number'}, // number?
@@ -113,10 +114,14 @@ router.get("/cart", (req, res) => {
     // if session (from req.cookies.sessionID) exists 
     Sessions.getOne(req.cookies.sessionID, (err, records) => {
         if (err) {
-            res.render("error", {err})
-        } else {
+            console.log("-------------error checking cookie---------")
+            // res.render("error", {err})
+        } else if (records === null || undefined) {
+            console.log("-----------records------------", records)
+            // res.render("cart")
+        }else {
             //display cart with event associated to the current user
-            res.render("cart", records)
+            res.render("cart")
         }
     })
 
