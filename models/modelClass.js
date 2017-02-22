@@ -1,9 +1,17 @@
 // this object is your mongoose
 class Model {
-    constructor () {
+    constructor (newSchema) {
         this.db = []
         this.schema = {}
         this.currentID = 0
+        this.setSchema(newSchema, (err, schema) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('SCHEMA SUCCESSFULLY ADDED:')
+                console.log(schema);
+            }
+        })
     }
 
     type(obj) {

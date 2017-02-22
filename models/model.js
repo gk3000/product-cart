@@ -1,4 +1,4 @@
-// this object is your mongoose
+// this object is your mongoose
 var model = {};
 // your mongoDB
 model.db = [];

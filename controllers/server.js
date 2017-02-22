@@ -4,89 +4,43 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const Model = require('../models/modelClass')
 
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
+// Creates new models with schema as argument
+var Sessions = new Model({
+    eventIDs: {type: 'array', subType: 'number'}, // number?
+    userID: {type: 'number'}
+})
 
-// calling the model
-// var Sessions = require('../models/model')
-
-// calling the dummy model
-// var Sessions = require('../models/model')
-// Sessions.setSchema(   {
-//      eventIDs: [ // array of object IDs
-//         {
-//             type: mongoose.Schema.Types.ObjectId,
-//             ref: "Event"
-//         }
-//     ],
-//     sessionID: String      
-//    },
-//    (err, statement) => {
-//         if(err) {
-//             console.log("Error setting the sessions schema")
-//         } else {
-//             console.log("Success setting the sessions schema")
-//         }
-//    }
-//    )
-
-// calling the model
-// var Events = require('../models/model')
-// calling the dummy model
-var Events = new Model();
-
-Events.setSchema({
-        name: {type: "string"},
-        startDate: {type: "string"},
-        endDate: {type: "string"},
-        subjects: {type: "array", subType: "string"},
-        type: {type: "array", subType: "string"},
-        image: {type: "string"},
-        description: {type: "string"},
-        price: {type: "number"}
-    },(err, statement) => {
-        if(err) {
-            console.log("Error setting the events schema")
-        } else {
-            console.log("Success setting the events schema")
-        }
+var Events = new Model({
+    name: {type: "string"},
+    startDate: {type: "string"},
+    endDate: {type: "string"},
+    subjects: {type: "array", subType: "string"},
+    type: {type: "array", subType: "string"},
+    image: {type: "string"},
+    description: {type: "string"},
+    price: {type: "number"}
    })
 
-// calling the model
-// var Users = require('../models/model')
-// calling the dummy model
-// var Users = require('../models/model')
-// Users.setSchema({
-//         // firstName: String,
-//         // lastName: String,
-//         // NIF: String,
-//         // companyName: String,
-//         // emailAddress: String,
-//         // phoneNumber: Number,
-//         // country: String,
-//         // address: String,
-//         // postcode: String,
-//         // city: String,
-//         // province: String
-//     },(err, statement) => {
-//         if(err) {
-//             console.log("Error setting the users schema")
-//         } else {
-//             console.log("Success setting the users schema")
-//         }
-//    })
-
-
-// connect to our model with assigned variable to use inside the controller
-// const eventsCollection = mongoose.model("events");
-// const sessionCollection = mongoose.model("sessions")
+var Users = new Model({
+    firstName: {type: "string"},
+    lastName: {type: "string"},
+    NIF: {type: "string"},
+    companyName: {type: "string"},
+    emailAddress: {type: "string"},
+    phoneNumber: {type: "number"}, // number?
+    country: {type: "string"},
+    address: {type: "string"},
+    postcode: {type: "string"},
+    city: {type: "string"},
+    province: {type: "string"}
+})
 
 router.get('/', function(req, res) {
     res.redirect('/events')
 })
 
-/*GET /events   
-Displays the events calendar page
-    renders the index.ejs view */
+// SHOW ALL EVENTS (works)
 router.get("/events", function(req, res) {
     Events.getAll( (err, events) =>{ 
         if (err) {
@@ -98,13 +52,14 @@ router.get("/events", function(req, res) {
     }) 
 })
 
-
+// SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
     var name, startDate, endDate, subjects, type, image, price, description;
     var newEvent = {name, startDate, endDate, subjects, type, image, price, description}
     res.render("new", {newEvent})
 })
 
+// POST NEW EVENT (works)
 router.post('/events/new', (req, res) => {
     console.log('EVENTS OBJECT: ', Events)
     var name = req.body.name,
@@ -130,11 +85,7 @@ router.post('/events/new', (req, res) => {
     })
 })
 
-/*
-GET /events/:id
-Displays the  selected single event page
-    renders the show.ejs
-*/
+// SHOW SINGLE EVENT (doesn't work)
 router.get("/events/:id", function (req, res) {
     Events.getOne(req.params.id, (err, event) => {
         if (err) {
@@ -144,14 +95,8 @@ router.get("/events/:id", function (req, res) {
         }
     })
 })
-/*
-POST /cart/:id
-- creates new session object
-- adds event reference to session object
-- creates new cookie with sessionID equal to session._id
-- redirects to /cart
-*/
 
+// ADD EVENT TO CART (doesn't work)
 router.post("/cart/:id", function(req, res){
     Sessions.save({eventIDs: [req.params.id]}, (err, record) =>{
         if (err) {
@@ -163,12 +108,7 @@ router.post("/cart/:id", function(req, res){
 })
 
 
-/*    
-GET /cart
-- displays the events the client has selected
-- information about selected tickets and the client is stored in an object ('session')
-- renders cart.ejs
-*/
+// SHOW CART (doesn't work)
 router.get("/cart", (req, res) => {
     // if session (from req.cookies.sessionID) exists 
     Sessions.getOne(req.cookies.sessionID, (err, records) => {
@@ -181,13 +121,6 @@ router.get("/cart", (req, res) => {
     })
 
 })
-
-/*
-GET /checkout/
-Displays the checkout page for the user with his sessionID
-renders the checkout.ejs
-args: get, sessionID
-*/
 
 module.exports = router;
 
