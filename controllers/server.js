@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const Model = require('../models/modelClass')
 
 app.set('view engine', 'ejs');
+
 // Creates new models with schema as argument
 var Sessions = new Model({
     eventIDs: {type: 'array', subType: 'number'}, // number?
@@ -12,14 +13,14 @@ var Sessions = new Model({
 })
 
 var Events = new Model({
-    name: {type: "string", unique: true},
-    startDate: {type: "string"},
-    endDate: {type: "string"},
-    subjects: {type: "array", subType: "string"},
-    type: {type: "array", subType: "string"},
-    image: {type: "string"},
-    description: {type: "string"},
-    price: {type: "number"}
+    name: {type: "string", unique: true, required: true},
+    startDate: {type: "string", required: true},
+    endDate: {type: "string", required: true},
+    subjects: {type: "array", subType: "string", required: true},
+    type: {type: "array", subType: "string", required: true},
+    image: {type: "string", required: true},
+    description: {type: "string", required: true},
+    price: {type: "number", required: true}
    })
 
 // TEMPORARY DB
@@ -79,17 +80,20 @@ router.get("/events", function(req, res) {
 
 // SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
+    var err = {};
+    // newEvent is for testing purposes
     var newEvent = {
-        name: 'Code event',
-        startDate: '01/01/17',
-        endDate: '01/02/17',
-        subjects: 'Node.js, javascript',
-        type: 'One month',
-        image: 'https://i2.wp.com/www.barcelonacodeschool.com/wp-content/uploads/2016/04/students-in-classroom.jpg?zoom=1.5&fit=564%2C388',
-        price: 100,
-        description: 'Description'
-    }
-    res.render("new", {newEvent})
+            name: 'Code event',
+            startDate: '01/01/17',
+            endDate: '01/02/17',
+            subjects: 'Node.js, javascript',
+            type: 'One month',
+            image: 'https://i2.wp.com/www.barcelonacodeschool.com/wp-content/uploads/2016/04/students-in-classroom.jpg?zoom=1.5&fit=564%2C388',
+            price: 100,
+            description: 'Description'
+        }
+
+    res.render("new", {newEvent, err})
 })
 
 // POST NEW EVENT (works)
@@ -97,19 +101,19 @@ router.post('/events/new', (req, res) => {
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
-        subjects = req.body.subjects.split(', '),
-        type = req.body.type.split(', '),
+        subjects = req.body.subjects === '' ? null : req.body.subjects.split(', '),
+        type = req.body.type === '' ? null :req.body.type.split(', '),
         image = req.body.image,
         price = parseInt(req.body.price),
         description = req.body.description,
-        
-        newEvent = {name, startDate, endDate, subjects, type, image, price, description};
 
+        newEvent = {name, startDate, endDate, subjects, type, image, price, description};
+        console.log('subjects after splitting: ', subjects)
     Events.save(newEvent, (err, event) => {
         if (err) {
-            console.log(err)
-            newEvent = {name, startDate, endDate, subjects: subjects.join(', '), type: type.join(', '), image, price, description}
-            res.render('new', {newEvent})
+            newEvent = {name, startDate, endDate, subjects, type, image, price, description}
+            console.log(newEvent)
+            res.render('new', {newEvent, err})
         } else {
             console.log('SUCCESSFULLY SAVED')
             res.redirect('/events')
@@ -128,7 +132,7 @@ router.get("/events/:id", function (req, res) {
             console.log(err);
             res.redirect('/events')
         } else {
-            res.render('show', {event: event})
+            res.render('show', {event})
         }
     })
 })
@@ -177,9 +181,10 @@ router.post('/events/update/:id', (req, res) => {
         type = req.body.type.split(', '),
         image = req.body.image,
         price = parseInt(req.body.price),
-        description = req.body.description,
+        description = req.body.description;
         
-        updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
+    var updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
+
     Events.update(req.params.id, updatedEvent, (err, event) => {
 
     })
