@@ -22,6 +22,7 @@ var Events = new Model({
     price: {type: "number"}
    })
 
+// TEMPORARY DB
 Events.db = [
     {
         id: 1,
@@ -108,16 +109,23 @@ router.post('/events/new', (req, res) => {
     })
 })
 
+
+///////////////// FOR ZLATAN ///////////////////////////////////////////
+
 // SHOW SINGLE EVENT (doesn't work)
 router.get("/events/:id", function (req, res) {
-    Events.getOne(req.params.id, (err, event) => {
+    var id = req.params.id;
+    Events.getOne({id: id}, function(err, event) {
         if (err) {
-            res.render("error", {err})
+            console.log(err);
+            res.redirect('/events')
         } else {
-            res.render("show", {event})
+            res.render('show', {event: event})
         }
     })
 })
+
+///////////////// NOT FOR ZLATAN ///////////////////////////////////////////
 
 // ADD EVENT TO CART (doesn't work)
 router.post("/cart/:id", function(req, res){
@@ -143,6 +151,18 @@ router.get("/cart", (req, res) => {
         }
     })
 
+})
+
+//
+router.get('/events/update/:id', (req, res) => {
+    Events.getOne({id: req.params.id}, (err, event) => {
+        res.render('update', {event});
+    })
+})
+
+// UPDATE EVENT
+router.post('/events/update/:id', (req, res) => {
+    // call update function
 })
 
 module.exports = router;
