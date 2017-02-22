@@ -47,6 +47,8 @@ class Model {
 
         for (var x in schema) {
             if (schema[x].unique){
+                
+                console.log('Unique property: ', x)
                 for (var ele of this.db) {
                     if (ele[x] === obj[x]) {
                         err[x] = ele[x] + ' already exists.'
@@ -73,7 +75,6 @@ class Model {
                 return "Problem with object type of " + x + ". Expected type to be " + schema[x].type + ", but it's a " + type(obj[x])
             }
         };
-        return newObj;
         }
 
         getAll(cb) {

@@ -79,8 +79,16 @@ router.get("/events", function(req, res) {
 
 // SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
-    var name, startDate, endDate, subjects, type, image, price, description;
-    var newEvent = {name, startDate, endDate, subjects, type, image, price, description}
+    var newEvent = {
+        name: 'Code event',
+        startDate: '01/01/17',
+        endDate: '01/02/17',
+        subjects: 'Node.js, javascript',
+        type: 'One month',
+        image: 'https://i2.wp.com/www.barcelonacodeschool.com/wp-content/uploads/2016/04/students-in-classroom.jpg?zoom=1.5&fit=564%2C388',
+        price: 100,
+        description: 'Description'
+    }
     res.render("new", {newEvent})
 })
 
@@ -162,7 +170,19 @@ router.get('/events/update/:id', (req, res) => {
 
 // UPDATE EVENT
 router.post('/events/update/:id', (req, res) => {
-    // call update function
+    var name = req.body.name,
+        startDate = req.body.startdate,
+        endDate = req.body.enddate,
+        subjects = req.body.subjects.split(', '),
+        type = req.body.type.split(', '),
+        image = req.body.image,
+        price = parseInt(req.body.price),
+        description = req.body.description,
+        
+        updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
+    Events.update(req.params.id, updatedEvent, (err, event) => {
+
+    })
 })
 
 module.exports = router;
