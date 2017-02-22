@@ -112,16 +112,23 @@ router.post('/events/new', (req, res) => {
     })
 })
 
+
+///////////////// FOR ZLATAN ///////////////////////////////////////////
+
 // SHOW SINGLE EVENT (doesn't work)
 router.get("/events/:id", function (req, res) {
-    Events.getOne(req.params.id, (err, event) => {
+    var id = req.params.id;
+    Events.getOne({id: id}, function(err, event) {
         if (err) {
-            res.render("error", {err})
+            console.log(err);
+            res.redirect('/events')
         } else {
-            res.render("show", {event})
+            res.render('show', {event: event})
         }
     })
 })
+
+///////////////// NOT FOR ZLATAN ///////////////////////////////////////////
 
 // ADD EVENT TO CART (doesn't work)
 router.post("/cart/:id", function(req, res){
