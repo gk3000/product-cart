@@ -19,7 +19,6 @@
 				<p><%= event.description.slice(0, 100) %>...</p>
 				<a class="btn btn-primary" href="/cart">Add to cart</a>
 				<a class="btn btn-default" href="/events/<%= event.id %>">Learn more</a>
-				<form action="/events/update/<%= event.id %>" method="POST"><input type="submit" name="update" value="Update"></form>
 			</div>
 		</div>
 	<% }) %>

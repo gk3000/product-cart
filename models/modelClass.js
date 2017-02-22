@@ -102,8 +102,29 @@ class Model {
         delete(obj, cb) {
             var err = null;
             var successMessage= null;
-            cb(err, successMessage);
-        }
+                
+                if (type(obj) !== 'object') {
+                    var err = 'Missing obj argument'
+                } else {
+                    for (var i =0; i < this.db.length; i++)
+                    if (this.bd[i].currentID === obj.currentID) {
+                        this.db.splice(i,1);
+                      break;
+                    }
+                       var successMessage = "Deleted successfully"
+                }
+
+                    
+                    
+                        // if they aren't tne same size they aren't the same thing
+                        // if they are the same size and do n't have the same properties, they arent' the same
+                        // if they are the same, delete
+                
+                 cb(err,successMessage)
+                // logic that selects the right oject from the db
+                // assign it to sentObj;
+            }
+                    
 
         update(id, newObj, cb) {
             var err;
