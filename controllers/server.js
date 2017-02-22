@@ -12,7 +12,7 @@ var Sessions = new Model({
 })
 
 var Events = new Model({
-    name: {type: "string"},
+    name: {type: "string", unique: true},
     startDate: {type: "string"},
     endDate: {type: "string"},
     subjects: {type: "array", subType: "string"},
@@ -47,8 +47,6 @@ Events.db = [
     }
 ]
 
-console.log('Events after hardcoding: ', Events)
-
 var Users = new Model({
     firstName: {type: "string"},
     lastName: {type: "string"},
@@ -73,7 +71,6 @@ router.get("/events", function(req, res) {
         if (err) {
             res.render("error", {err})
         } else {
-            console.log(events)
             res.render("index", {events}) 
         }
     }) 
@@ -88,7 +85,6 @@ router.get("/events/new", (req, res) => {
 
 // POST NEW EVENT (works)
 router.post('/events/new', (req, res) => {
-    console.log('EVENTS OBJECT: ', Events)
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
@@ -107,7 +103,7 @@ router.post('/events/new', (req, res) => {
             res.render('new', {newEvent})
         } else {
             console.log('SUCCESSFULLY SAVED')
-            res.render('new', {newEvent})
+            res.redirect('/events')
         }
     })
 })

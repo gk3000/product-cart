@@ -17,7 +17,7 @@
 				<hr>
 				<p><%= event.description.slice(0, 100) %>...</p>
 				<a class="btn btn-primary" href="/cart">Add to cart</a>
-				<a class="btn btn-default" action="/events/<%= event._id %>">Learn more</a>
+				<a class="btn btn-default" action="/events/<%= event.id %>">Learn more</a>
 			</div>
 		</div>
 	<% }) %>

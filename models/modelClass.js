@@ -3,45 +3,39 @@ class Model {
     constructor (newSchema) {
         this.db = []
         this.schema = {}
-        this.id = 0
-        this.id++
+        this.currentID = 0;
         this.setSchema(newSchema, (err, schema) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log('SCHEMA SUCCESSFULLY ADDED:')
-                console.log(schema);
+                console.log('SCHEMA SUCCESSFULLY ADDED')
             }
         })
     }
 
-    currentID() {
-
-    }
     type(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
 
     setSchema(newSchema, cb) {
         this.schema = newSchema;
-        console.log('This after setSchema', this)
         var err;
         cb(err, newSchema);
     }
 
     validate(obj) {
-        //console.log(obj)
         var schema = this.schema;
         var type = this.type;
-        //console.log('THIS:  ', this)
         var newObj ={}; 
         var err = {}
 
         for (var x in schema) {
             if (schema[x].unique){
                 for (var ele of this.db) {
+                    console.log('ele[x]: ', ele[x], 'obj[x]', obj[x])
                     if (ele[x] === obj[x]) {
                         err.duplicate = "Duplicate name: " + x
+                        console.log(err)
                     }
                 } 
             }
