@@ -79,18 +79,13 @@ model.getAll = function(cb) {
 //     retrieves the object with that ID
 //     executes callback with object if successful, with error if not
 
-findById
-
-findOne
-
-
 model.getOne = function(obj, cb) {
     var err = null;
     var objKey = Object.keys(obj);
     var objVal = obj[objKey];
     var foundObj = null;
     
-    if (type(id) !== 'object') {
+    if (type(obj) !== 'object') {
         var err = 'Missing obj argument'
         cb(err);
     } else {
@@ -132,7 +127,29 @@ model.delete = function(obj, cb) {
     var successMessage= null;
     
     // logic to find the matching item and delete it
-
+   
+    var objKey = Object.keys(obj);
+    var objVal = obj[objKey];
+    var foundObj = null;
+    
+    if (type(obj) !== 'object') {
+        var err = 'Missing obj argument'
+        cb(err);
+    } else {
+        this.db.foreach(function(element,index) {
+            if (element[objKey] === objVal) {
+                for (var i =0; i < this.db.length; i++)
+                 if (this.db[i].name === objVal) {
+                  someArray.splice(i,1);
+                  break;
+                }
+                cb(err, ele);
+            }
+        })
+    }
+    // logic that selects the right oject from the db
+    // assign it to sentObj;
+};
     cb(err, successMessage);
 };
 //  model.update(ID, newObj, cb):
