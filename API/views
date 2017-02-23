@@ -1,0 +1,28 @@
+VIEWS
+    /PARTIALS
+        header.ejs
+        - contains header, menu and links to stylesheets
+        - is included in all ejs files
+
+        footer.ejs
+        - contains footer
+        - is included in all ejs files
+
+    index.ejs
+    - Shows all events. Each event has a 'read more' (GET events/:id) and a 'add to cart' (POST cart/:id) button
+
+    show.ejs
+    - Shows a single event with more information. Has a 'add to cart' button
+
+    cart.ejs
+    - Shows all the user's selected events
+    - Allows user to remove and edit items before checkout
+
+    checkout.ejs
+    - Allows the user to choose payment method
+
+    confirmation.ejs
+    - Displays that the purchase has been successfully made
+
+    error.ejs
+    - Displays errors
