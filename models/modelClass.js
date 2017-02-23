@@ -29,7 +29,7 @@ class Model {
         var validatedObj = validation[0];
 
         if (valid) {
-            obj.id = this.currentID;
+            validatedObj.id = this.currentID;
             this.db.push(validatedObj); 
             this.currentID++;   
         } else {
@@ -105,12 +105,13 @@ class Model {
             if (type(obj) !== 'object') {
                 var err = 'Missing obj argument'
             } else {
-                for (var i =0; i < this.db.length; i++)
-                if (this.bd[i].currentID === obj.currentID) {
-                    this.db.splice(i,1);
-                  break;
-                }
+                for (var i =0; i < this.db.length; i++){
+                    if (this.db[i].id == obj.id) {
+                        this.db.splice(i,1);
+                      break;
+                    }
                    var successMessage = "Deleted successfully"
+                }   
             }
 
                 
@@ -129,9 +130,22 @@ class Model {
         var err;
         var successMessage;
         
-        newObj.id = id;
-        this.db.push(newObj); 
-        cb(err, successMessage);
+                for (var i =0; i < this.db.length; i++){
+                      console.log("Enterd into the loop"  + this.db[i].id)
+                    if (this.db[i].id == id) {
+                          
+                        for(let key in newObj)
+                        {
+                            this.db[i][key] = newObj[key]
+                        }
+                        return cb(err, this.db[i]); 
+                    }
+                    else {
+                        err = "Not updated"
+                    }
+                console.log(this.db[i])
+              }
+       
     }
 };
 

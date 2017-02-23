@@ -177,8 +177,8 @@ router.post('/events/update/:id', (req, res) => {
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
-        subjects = req.body.subjects.split(', '),
-        type = req.body.type.split(', '),
+        subjects = req.body.subjects.split(' , '),
+        type = req.body.type.split(' , '),
         image = req.body.image,
         price = parseInt(req.body.price),
         description = req.body.description;
@@ -186,8 +186,14 @@ router.post('/events/update/:id', (req, res) => {
     var updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
 
     Events.update(req.params.id, updatedEvent, (err, event) => {
-
+        if (err) {
+            console.log(err);
+            
+        } else {
+            res.redirect('/events')
+        }
     })
+
 })
 
 module.exports = router;
