@@ -1,8 +1,7 @@
-
-var express = require('express')
-var app = express()
-const router = express.Router()
-const mongoose = require("mongoose")
+var express = require('express');
+var app = express();
+const router = express.Router();
+const mongoose = require("mongoose");
 
 
 // Set view engine folder
@@ -10,7 +9,7 @@ app.set('view engine', 'ejs')
 app.set('view cache', false);
 
 // Body parser for forms
-var bodyParser= require('body-parser')
+var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 

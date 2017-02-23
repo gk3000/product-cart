@@ -1,0 +1,23 @@
+<% include partials/header %>
+<h2>Add event</h2>
+<form action="/events/new" method="post">
+	<label>Event name</label>
+	<input class="form-control" type="text" name="name" value="<%= newEvent.name %>">
+	<label>Start date</label>
+	<input class="form-control" type="datetime-local" name="startdate" value="<%= newEvent.startDate %>">
+	<label>End date</label>
+	<input class="form-control" type="datetime-local" name="enddate" value="<%= newEvent.endDate %>">
+	<label>Subjects (separate with comma)</label>
+	<input class="form-control" type="text" name="subjects" value="<%= newEvent.subjects %>">
+	<label>Type(s) (separate with comma)</label>
+	<input class="form-control" type="text" name="type" value="<%= newEvent.type %>">
+	<label>Image URL</label>
+	<input class="form-control" type="text" name="image" value="<%= newEvent.image %>">
+	<label>Price (€)</label>
+	<input class="form-control" type="text" name="price" value="<%= newEvent.price %>">
+	<label>Description</label>
+	<textarea name="description" class="form-control">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea><br>
+	<input class="form-control" type="submit" value="Add event">
+</form>
+
+<% include partials/footer %>

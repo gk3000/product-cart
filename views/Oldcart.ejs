@@ -1,0 +1,87 @@
+<% include partials/header %>
+<h2>Cart page</h2>
+<% var sum = 0 %>
+<% var total = 0 %>
+<% var iva = 0.21 %>
+<div class="row">
+	<% events.forEach(function(event) { %>
+		<div class="col-md-12">
+			<div class="thumbnail">
+<!-- 				<img class="img-responsive" src="<%#= event.image %>"> -->
+				<h2><%= event.name %>
+				<small class="text-muted">
+				Starts on: <%= event.startDate%>
+				</small></h2>
+						<form class="form-inline" action="/cart/update/<%=event.id%>" method="post">
+							<!-- <label for="quantity" class=" control-label">Change the quantity</label> -->
+							<select class="form-control" data-toggle="tooltip" name="updateQuantity" data-placement="bottom" title="Change the quantity">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							</select>
+							<button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Update" name="updateQuantity">Update</button>
+							<button type="button" class="btn btn-default" aria-label="Remove" data-toggle="tooltip" data-placement="bottom" title="Remove">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+						</form>
+<!-- 				<#% event.subjects.forEach(function(subject) { %>
+					<div class="label label-default"><#%= subject %></div>
+				<#% }) %> -->
+<!-- 				<#% event.type.forEach(function(type){ %>
+					<div class="label label-info"><#%= type %></div>
+					<#% }) %> -->
+				<p class="thumbnail pull-right"><strong>Price: </strong>€<%= event.price %><%sum = sum + event.price%></p>
+<!-- 				<hr> -->
+<!-- 				<p><#%= event.description.slice(0, 100) %>...</p> -->
+<!-- 				<a class="btn btn-primary" href="/cart">Add to cart</a>
+				<a class="btn btn-default" action="/events/<#%= event._id %>">Learn more</a> -->
+			</div>
+		</div>
+	<% }) %>
+
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="thumbnail pull-right">
+			<form class="form-inline">
+				<div class="form-group">
+				<input type="text" class="form-control" id="couponCode" placeholder="Coupon code">
+				</div>
+				<button type="submit" class="btn btn-default">Apply coupon</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+		<div class="col-md-6 pull-right">
+			<div class="thumbnail">
+				<h3>Cart totals: <%= sum %></h3>
+					<table class="table table-striped">
+						<tr>
+							<td><h4>Subtotal</h4></td>
+							<td><h4>€<%= sum %></h4></td>
+						</tr>
+						<tr>
+							<td><h4>Total (IVA 21% incl.)</h4></td>
+							<td><h4><% total = sum + (sum * iva) %>€<%= total %></h4></td>
+						</tr>
+					</table>
+			</div>
+		</div>
+</div>
+
+<div class="row">
+		<div class="col-md-6 pull-right">
+			<div class="thumbnail">
+				<a class="btn btn-default btn-group-justified" type="submit" href="/checkout/<%= total %>">Proceed to the checkout</a>
+			</div>
+		</div>
+</div>
+
+<% include partials/footer %>
+
+

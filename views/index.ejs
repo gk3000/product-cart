@@ -6,16 +6,16 @@
 		<div class="col-md-6">
 			<div class="thumbnail">
 				<img class="img-responsive" src="<%= event.image %>">
-				<h2><%= event.eventName %></h2>
+				<h2><%= event.name %></h2>
 				<% event.subjects.forEach(function(subject) { %>
 					<div class="label label-default"><%= subject %></div>
 				<% }) %>
-				<% event.eventType.forEach(function(type){ %>
+				<% event.type.forEach(function(type){ %>
 					<div class="label label-info"><%= type %></div>
 					<% }) %>
 				<p class="pull-right"><strong>Price: </strong>€<%= event.price %></p>
 				<hr>
-				<p><%= event.eventDetails.slice(0, 100) %>...</p>
+				<p><%= event.description.slice(0, 100) %>...</p>
 				<a class="btn btn-primary" href="/cart">Add to cart</a>
 				<a class="btn btn-default" action="/events/<%= event._id %>">Learn more</a>
 			</div>
