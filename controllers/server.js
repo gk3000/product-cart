@@ -8,9 +8,16 @@ app.set('view engine', 'ejs');
 
 // Creates new models with schema as argument
 var Sessions = new Model({
-    eventIDs: {type: 'array', subType: 'number'}, // number?
+    events: {type: 'array', subType: 'object'},
     userID: {type: 'number'}
 })
+
+Sessions.db = [
+    {
+    events: [{id: 2, qty: 3}, {id: 1, qty: 4}],
+    userID: 01
+    }
+]
 
 var Events = new Model({
     name: {type: "string"},
@@ -27,7 +34,7 @@ Events.db = [
     {
         id: 1,
         name: "SuperCodeCamp",
-        startDate: '27/05/2017, 08:00 AM',
+        startDate: '12/07/2017, 10:00 AM',
         endDate: '27/08/2017, 08:00 PM',
         subjects: ['Node.js', 'express.js', 'mongoDB'],
         type: ['Full stack', 'Three months'],
@@ -74,7 +81,6 @@ router.get("/events", function(req, res) {
         if (err) {
             res.render("error", {err})
         } else {
-            console.log(events)
             res.render("index", {events}) 
         }
     }) 
@@ -138,20 +144,63 @@ router.post("/cart/:id", function(req, res){
 
 // SHOW CART (doesn't work)
 router.get("/cart", (req, res) => {
+    var cartEvents = []
+    var rec = Sessions.db[0] // expected output of search for the user session
+console.log("-----------rec.events-----------", rec.events) // array with objects {id: , qty: }
+        for (var i = 0; i < rec.events.length; i++) {
+            console.log(rec.events[i])
+            
+        }
+
     // if session (from req.cookies.sessionID) exists 
-    Sessions.getOne(req.cookies.sessionID, (err, records) => {
-        if (err) {
-            console.log("-------------error checking cookie---------")
-            // res.render("error", {err})
-        } else if (records === null || undefined) {
-            console.log("-----------records------------", records)
-            // res.render("cart")
-        }else {
+    // Sessions.getOne(req.cookies.sessionID, (err, records) => {
+
+        // if (err) {
+        //     console.log("-------------error checking cookie---------")
+        //     res.render("cart")
+        //     // res.render("error", {err})
+        // } else if (records === null || undefined) {
+        //     console.log("-----------records------------", records)
+        //     res.render("cart")
+        // } else {
             //display cart with event associated to the current user
-            res.render("cart")
+            res.render("cart", {rec})
+        // }
+})
+
+
+
+// // SHOW CART THE OLD ONE
+// router.get("/cart", (req, res) => {
+//     // console.log("-----------Events.db---------", Events.db)
+//     res.render("Oldcart", {events: Events.db})
+    
+// })
+
+
+// POST /cart/update
+// Cart page with update the quantity of products
+//     renders the cart.ejs
+// args: post, sessionID, amount of products
+
+router.post("/cart/update/:id", (req, res) => {
+    console.log("--------new quantity--------", req.body.name)
+    var qty = req.body.name
+    Sessions.update(req.params.id, {qty: req.body.name}, (err, record) =>{
+        if (err) {
+            res.render("error", {err})
+        } else {
+            res.render("cart", {events: Events.db})
         }
     })
+})
 
+
+
+// CHECKOUT page
+router.get("/checkout/:total", (req, res) => {
+    total = req.params.total
+    res.render("checkout")
 })
 
 module.exports = router;
@@ -161,10 +210,7 @@ module.exports = router;
 
 
 /*
-POST /cart/update
-Cart page with update the quantity of products
-    renders the cart.ejs
-args: post, sessionID, amount of products
+
 
 POST /cart/remove
 Cart page with remove the product option
