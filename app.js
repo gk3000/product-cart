@@ -21,6 +21,9 @@ app.use('/public', express.static('public'))
 var eventRoutes = require('./controllers/routes/events.js');
 app.use("/", eventRoutes)
 
+var authRoutes = require('./controllers/routes/auth.js');
+app.use('/user', authRoutes)
+
 app.listen(4001, function() {
     console.log("---------------listening in port 4001--------------")
 })
