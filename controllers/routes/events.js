@@ -3,6 +3,8 @@ var express      = require('express'),
     Events       = require('../../models/models/Events'),
     Sessions     = require('../../models/models/Sessions')
 
+var user = {}, session = {}, event = {};
+
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -34,7 +36,7 @@ router.get("/events/new", (req, res) => {
             description: 'Description'
         }
 
-    res.render("new", {newEvent, err})
+    res.render("new", {newEvent})
 })
 
 // POST NEW EVENT (works)
@@ -90,12 +92,12 @@ router.post("/cart/:id", function(req, res){
 // SHOW CART (doesn't work OR DOES IT???)
 router.get("/cart", (req, res) => {
     // if session (from req.cookies.sessionID) exists 
-    Sessions.getOne(req.cookies.sessionID, (err, records) => {
+    Sessions.getOne(req.cookies.sessionID, (err, session) => {
         if (err) {
             res.render("error", {err})
         } else {
             //display cart with event associated to the current user
-            res.render("cart", records)
+            res.render("cart", {session})
         }
     })
 
