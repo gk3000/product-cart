@@ -29,7 +29,7 @@ class Model {
         var validatedObj = validation[0];
 
         if (valid) {
-            obj.id = this.currentID;
+            validatedObj.id = this.currentID;
             this.db.push(validatedObj); 
             this.currentID++;   
         } else {
@@ -98,24 +98,28 @@ class Model {
         }
     }
 
-    delete(obj, cb) {
+    delete(id,obj, cb) {
         var err = null;
         var successMessage= null;
+        var type = this.type
             
             if (type(obj) !== 'object') {
                 var err = 'Missing obj argument'
+                console.log(err)
+                cb(err);
             } else {
                 for (var i =0; i < this.db.length; i++){
-                    if (this.db[i].id == obj.id) {
+                    if (this.db[i].id == id) {
                         this.db.splice(i,1);
                       break;
                     }
-                   var successMessage = "Deleted successfully"
-                }   
+                  
+                }
+                    
             }
 
   
-             return cb(err,successMessage)
+             return cb(err,obj)
           
         }
                 
@@ -123,21 +127,19 @@ class Model {
     update(id, newObj, cb) {
         var err;
         var successMessage;
+        console.log("id: ", typeof id)
         
                 for (var i =0; i < this.db.length; i++){
-                      console.log("Enterd into the loop"  + this.db[i].id)
-                    if (this.db[i].id == id) {
-                          
+                      console.log("Enterd into the loop "  + typeof this.db[i].id)
+                    if (this.db[i].id === parseInt(id)) {
+                          console.log("this.db[i]: ", this.db[i])
                         for(let key in newObj)
                         {
                             this.db[i][key] = newObj[key]
+                            console.log("UPDATED DATABASE")
                         }
-                        return cb(err, this.db[i]); 
+                        return cb(err, newObj)
                     }
-                    else {
-                        err = "Not updated"
-                    }
-                console.log(this.db[i])
               }
        
     }

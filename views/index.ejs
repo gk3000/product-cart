@@ -18,6 +18,8 @@
 				<hr>
 				<p><%= event.description.slice(0, 100) %>...</p>
 				<a class="btn btn-primary" href="/cart">Add to cart</a>
+				<a type="button" class="btn btn-danger" href="/events/delete/<%= event.id%>">Delete</a>
+				<a type="button" class="btn btn-success" href ="/events/update/<%=event.id%>">Update</a>
 				<a class="btn btn-default" href="/events/<%= event.id %>">Learn more</a>
 				
 			</div>

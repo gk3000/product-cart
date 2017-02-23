@@ -100,6 +100,42 @@ router.get("/cart", (req, res) => {
     })
 
 })
+// DELETE EVENT
+
+router.get('/events/delete/:id', (req, res) => {
+    Events.getOne({id: req.params.id}, (err, event) => {
+        if (err) {
+                console.log("err from getOne ",err);
+                
+        } else{
+            res.render('delete', {event});
+            console.log(event)
+        } 
+    })
+})
+
+router.post('/events/delete/:id', (req, res) => {
+    Events.getOne({id: req.params.id}, (err, event) => {
+        if (err) {
+                console.log("err from getOne ",err);
+                
+        } else {
+           
+            Events.delete(req.params.id, event, (err, event) => {
+            if (err) {
+                console.log(err);
+                
+            } else {
+                res.redirect('/events')
+                console.log("Not redirecting")
+            }
+            })
+        }
+
+    })
+
+})
+
 
 
 // UPDATE EVENT
@@ -126,6 +162,7 @@ router.post('/events/update/:id', (req, res) => {
     Events.update(req.params.id, updatedEvent, (err, event) => {
         if (err) {
             console.log(err);
+            res.redirect('/events/update/' + req.params.id)
             
         } else {
             res.redirect('/events')
