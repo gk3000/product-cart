@@ -25,16 +25,18 @@ class Model {
 
     save(obj, cb) {
         var err, validation = this.validate(obj);
+        var valid = validation[1];
+        var validatedObj = validation[0];
 
-        if (validation[1]) {
+        if (valid) {
             obj.id = this.currentID;
-            this.db.push(validation[0]); 
+            this.db.push(validatedObj); 
             this.currentID++;   
         } else {
-            err = validation[0];
+            err = validatedObj;
         }
 
-        cb(err, validation[0]);
+        cb(err, validatedObj);
     }
 
     validate(obj) {
