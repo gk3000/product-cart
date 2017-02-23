@@ -142,40 +142,16 @@ router.post("/cart/:id", function(req, res){
 })
 
 
-// SHOW CART (doesn't work)
+
+
+
+
+// SHOW CART 
 router.get("/cart", (req, res) => {
-    var cartEvents = []
-    var rec = Sessions.db[0] // expected output of search for the user session
-console.log("-----------rec.events-----------", rec.events) // array with objects {id: , qty: }
-        for (var i = 0; i < rec.events.length; i++) {
-            console.log(rec.events[i])
-            
-        }
-
-    // if session (from req.cookies.sessionID) exists 
-    // Sessions.getOne(req.cookies.sessionID, (err, records) => {
-
-        // if (err) {
-        //     console.log("-------------error checking cookie---------")
-        //     res.render("cart")
-        //     // res.render("error", {err})
-        // } else if (records === null || undefined) {
-        //     console.log("-----------records------------", records)
-        //     res.render("cart")
-        // } else {
-            //display cart with event associated to the current user
-            res.render("cart", {rec})
-        // }
-})
-
-
-
-// // SHOW CART THE OLD ONE
-// router.get("/cart", (req, res) => {
-//     // console.log("-----------Events.db---------", Events.db)
-//     res.render("Oldcart", {events: Events.db})
+    // console.log("-----------Events.db---------", Events.db)
+    res.render("cart", {events: Events.db})
     
-// })
+})
 
 
 // POST /cart/update
