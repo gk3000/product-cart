@@ -1,0 +1,9 @@
+<% include partials/header %>
+<h2>Search event</h2>
+<form action="/events/search/<%= word%>" method="post">
+	<label>Event name</label>
+	<input class="form-control" type="text" name="name" value="<%= event.name %>">
+	<input class="form-control" type="submit" value="Are you sure ?">
+</form>
+
+<% include partials/footer %>

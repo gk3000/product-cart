@@ -171,5 +171,33 @@ router.post('/events/update/:id', (req, res) => {
 
 })
 
+
+//Search event in the website
+
+
+router.get('/events/search/:word', (req, res) => {
+    Events.getOne({id: req.params.id}, (err, event) => {
+        res.render('update', {event});
+    })
+})
+
+// UPDATE EVENT
+router.post('/events/search/:word', (req, res) => {
+   
+        
+    var updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
+
+    Events.update(req.params.id, updatedEvent, (err, event) => {
+        if (err) {
+            console.log(err);
+            res.redirect('/events/update/' + req.params.id)
+            
+        } else {
+            res.redirect('/events')
+        }
+    })
+
+})
+
 module.exports = router;
 
