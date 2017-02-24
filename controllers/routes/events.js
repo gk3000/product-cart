@@ -6,8 +6,7 @@ var express      = require('express'),
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
-})
-
+})    
 // SHOW ALL EVENTS (works)
 router.get("/events", function(req, res) {
     Events.getAll( (err, events) =>{ 
@@ -18,6 +17,25 @@ router.get("/events", function(req, res) {
         }
     }) 
 })
+
+//Search event in the website
+router.get('/events/search', function(req, res) {
+   var searchword = req.query.search   
+            Events.search(searchword, function(err, event){
+                console.log(searchword)
+                    if (err) {
+                       console.log(err)
+                    } else {
+
+                        res.render("search", {event}) 
+                        
+                    }
+              
+
+            })
+   
+})
+
 
 // SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
@@ -42,8 +60,8 @@ router.post('/events/new', (req, res) => {
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
-        subjects = req.body.subjects === '' ? null : req.body.subjects.split(', '),
-        type = req.body.type === '' ? null :req.body.type.split(', '),
+        subjects = req.body.subjects === '' ? null : req.body.subjects.split(','),
+        type = req.body.type === '' ? null :req.body.type.split(','),
         image = req.body.image,
         price = parseInt(req.body.price),
         description = req.body.description,
@@ -75,33 +93,8 @@ router.get("/events/:id", function (req, res) {
     })
 })
 
-// ADD EVENT TO CART (doesn't work OR DOES IT???)
-router.post("/cart/:id", function(req, res){
-    Sessions.save({eventIDs: [req.params.id]}, (err, record) =>{
-        if (err) {
-            res.render("error", {err})
-        } else {
-        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
-        }
-    })
-})
 
-
-// SHOW CART (doesn't work OR DOES IT???)
-router.get("/cart", (req, res) => {
-    // if session (from req.cookies.sessionID) exists 
-    Sessions.getOne(req.cookies.sessionID, (err, records) => {
-        if (err) {
-            res.render("error", {err})
-        } else {
-            //display cart with event associated to the current user
-            res.render("cart", records)
-        }
-    })
-
-})
 // DELETE EVENT
-
 router.get('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
         if (err) {
@@ -127,7 +120,7 @@ router.post('/events/delete/:id', (req, res) => {
                 
             } else {
                 res.redirect('/events')
-                console.log("Not redirecting")
+        
             }
             })
         }
@@ -172,32 +165,31 @@ router.post('/events/update/:id', (req, res) => {
 })
 
 
-//Search event in the website
-
-
-router.get('/events/search/:word', (req, res) => {
-    Events.getOne({id: req.params.id}, (err, event) => {
-        res.render('update', {event});
+router.post("/events/cart/:id", function(req, res){
+    Sessions.save({eventIDs: [req.params.id]}, (err, record) =>{
+        if (err) {
+            res.render("error", {err})
+        } else {
+        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+        }
     })
 })
 
-// UPDATE EVENT
-router.post('/events/search/:word', (req, res) => {
-   
-        
-    var updatedEvent = {name, startDate, endDate, subjects, type, image, price, description};
 
-    Events.update(req.params.id, updatedEvent, (err, event) => {
+// SHOW CART (doesn't work OR DOES IT???)
+router.get("/events/cart", (req, res) => {
+    // if session (from req.cookies.sessionID) exists 
+    Sessions.getOne(req.cookies.sessionID, (err, records) => {
         if (err) {
-            console.log(err);
-            res.redirect('/events/update/' + req.params.id)
-            
+            res.render("error", {err})
         } else {
-            res.redirect('/events')
+            //display cart with event associated to the current user
+            res.render("cart", records)
         }
     })
 
 })
+
 
 module.exports = router;
 

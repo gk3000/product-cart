@@ -84,18 +84,19 @@ class Model {
         var err, type = this.type;
         var objKey = Object.keys(obj)[0];
         var objVal = obj[objKey];
+        var element = {}
         
-        if (type(obj) !== 'object') {
-            var err = 'Missing obj argument'
-            console.log(err)
-            cb(err);
-        } else {
+        // if (type(obj) !== 'object') {
+        //     var err = 'Missing obj argument'
+        //     console.log(err)
+        //     return cb(err,element);
+        // } else {
             for (var ele of this.db) {
                 if (ele[objKey] == objVal) {
                     return cb(err, ele);
                 }
             }
-        }
+        // }
     }
 
     delete(id,obj, cb) {
@@ -106,7 +107,7 @@ class Model {
             if (type(obj) !== 'object') {
                 var err = 'Missing obj argument'
                 console.log(err)
-                cb(err);
+                return cb(err);
             } else {
                 for (var i =0; i < this.db.length; i++){
                     if (this.db[i].id == id) {
@@ -119,7 +120,7 @@ class Model {
             }
 
   
-             return cb(err,obj)
+              return cb(err,obj)
           
         }
                 
@@ -136,14 +137,67 @@ class Model {
                         for(let key in newObj)
                         {
                             this.db[i][key] = newObj[key]
-                            console.log("UPDATED DATABASE")
+                            successMessage="UPDATED DATABASE"
                         }
-                        return cb(err, newObj)
                     }
               }
+              if(successMessage == undefined) {
+                err = "Update unsuccessful"
+              }
        
+        cb(err, successMessage)
     }
-};
 
+
+    search(searchword , cb){
+        var err = null;
+        var eventSent = undefined;
+        var type = this.type
+        var event
+        
+        console.log("in search method",searchword)
+        for (var i =0; i < this.db.length; i++){
+            console.log("enterd into the first dbloop",this.db)     
+            for(let key in this.db[i]) {
+                var idno;
+                console.log("keys in db",key)
+                var word=this.db[i][key]
+                 console.log("word is  ", word)
+                 
+                if(type(word) === 'array'){
+                    
+                   for(let j of word){
+                        console.log(j)
+                        console.log(searchword)
+                        if(searchword == j ) {
+                          console.log("found word in an array of index", this.db[i].id)
+                          var idno = this.db[i].id
+                           event = this.getOne({id:idno},function(err,event){
+                           console.log("From getone method",event)
+                            eventSent = event 
+                          })
+                          
+                        }  
+
+                   }
+                }
+                else if(searchword == word) {
+        
+                    console.log("Found Word as word")
+                    var idno = this.db[i].id
+                      event = this.getOne({id:idno},function(err,event){
+                         eventSent = event 
+                      })
+                       
+                }  
+            }     
+        }
+        if (eventSent == undefined) {
+            err = "Word not found"
+        }
+        console.log("Before return statement",eventSent)         
+         cb(err,eventSent)
+    }
+}    
 
 module.exports = Model;

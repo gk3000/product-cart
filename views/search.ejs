@@ -1,9 +1,30 @@
 <% include partials/header %>
-<h2>Search event</h2>
-<form action="/events/search/<%= word%>" method="post">
-	<label>Event name</label>
-	<input class="form-control" type="text" name="name" value="<%= event.name %>">
-	<input class="form-control" type="submit" value="Are you sure ?">
-</form>
+
+
+<div class="row">
+		<div class="col-md-6">
+			<div class="thumbnail">
+			    <h1><%= event.name %></h1>
+				<img class="img-responsive" src="<%= event.image %>">
+				
+				<p><b>Starts:</b> <%= event.startDate %> | <b>Ends:</b> <%= event.endDate %></p>
+				<% event.subjects.forEach(function(subject) { %>
+					<div class="label label-default"><%= subject %></div>
+				<% }) %>
+				<% event.type.forEach(function(type){ %>
+					<div class="label label-info"><%= type %></div>
+					<% }) %>
+				<p class="pull-right"><strong>Price: </strong>€<%= event.price %></p>
+				<hr>
+				<p><%= event.description.slice(0, 100) %>...</p>
+				<a class="btn btn-primary" href="/cart">Add to cart</a>
+				<a type="button" class="btn btn-danger" href="/events/delete/<%= event.id%>">Delete</a>
+				<a type="button" class="btn btn-success" href ="/events/update/<%=event.id%>">Update</a>
+				<a type="button" class="btn btn-info" href ="/events/<%=event.id%>">Show Event</a>
+				<a class="btn btn-default" href="/events/<%= event.id %>">Learn more</a>
+				
+			</div>
+		</div>
+</div>
 
 <% include partials/footer %>

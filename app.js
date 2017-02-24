@@ -17,12 +17,13 @@ app.use(cookieParser())
 // Public assets
 app.use('/public', express.static('public'))
 
+var authRoutes = require('./controllers/routes/auth.js');
+app.use('/user', authRoutes)
+
 // Set up routes
 var eventRoutes = require('./controllers/routes/events.js');
 app.use("/", eventRoutes)
 
-var authRoutes = require('./controllers/routes/auth.js');
-app.use('/user', authRoutes)
 
 app.listen(4001, function() {
     console.log("---------------listening in port 4001--------------")
