@@ -21,13 +21,13 @@ router.get("/events", function(req, res) {
 //Search event in the website
 router.get('/events/search', function(req, res) {
    var searchword = req.query.search   
-            Events.search(searchword, function(err, event){
+            Events.search(searchword, function(err, events){
                 console.log(searchword)
                     if (err) {
                        console.log(err)
                     } else {
 
-                        res.render("search", {event}) 
+                        res.render("index", {events}) 
                         
                     }
               

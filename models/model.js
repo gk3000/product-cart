@@ -153,7 +153,8 @@ class Model {
         var err = null;
         var eventSent = undefined;
         var type = this.type
-        var event
+        var event;
+        var eventsarray = [];
         
         console.log("in search method",searchword)
         for (var i =0; i < this.db.length; i++){
@@ -174,7 +175,8 @@ class Model {
                           var idno = this.db[i].id
                            event = this.getOne({id:idno},function(err,event){
                            console.log("From getone method",event)
-                            eventSent = event 
+                            eventsarray.push(event) 
+                            console.log("After pushing in array if it is an array",eventsarray)
                           })
                           
                         }  
@@ -186,17 +188,19 @@ class Model {
                     console.log("Found Word as word")
                     var idno = this.db[i].id
                       event = this.getOne({id:idno},function(err,event){
-                         eventSent = event 
+                         eventsarray.push(event) 
+                         console.log("After pushing in array if it is a string",eventsarray)      
                       })
                        
                 }  
             }     
         }
-        if (eventSent == undefined) {
+        if (eventsarray == undefined) {
             err = "Word not found"
         }
-        console.log("Before return statement",eventSent)         
-         cb(err,eventSent)
+        console.log("Before return statement",eventsarray) 
+        
+         cb(err,eventsarray)
     }
 }    
 
