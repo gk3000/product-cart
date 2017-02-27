@@ -149,7 +149,7 @@ router.post("/cart/:id", function(req, res){
 // SHOW CART 
 router.get("/cart", (req, res) => {
     // console.log("-----------Events.db---------", Events.db)
-    res.render("cart", {events: Events.db})
+    res.render("cart2", {events: Events.db})
     
 })
 
