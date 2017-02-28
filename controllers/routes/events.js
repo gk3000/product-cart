@@ -10,10 +10,6 @@ Sessions.db = [
     userID: 01
     }
 ]
-
-var user = {}, session = {}, event = {};
-
-
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -63,7 +59,7 @@ router.get("/events/new", (req, res) => {
             description: 'Description'
         }
 
-    res.render("new", {newEvent})
+    res.render("new", {newEvent, err})
 })
 
 // POST NEW EVENT (works)
@@ -118,21 +114,12 @@ router.get('/events/delete/:id', (req, res) => {
     })
 })
 
-
 router.post('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
-
-
-// SHOW CART (doesn't work OR DOES IT???)
-router.get("/cart", (req, res) => {
-    // if session (from req.cookies.sessionID) exists 
-    Sessions.getOne(req.cookies.sessionID, (err, session) => {
-
         if (err) {
                 console.log("err from getOne ",err);
                 
         } else {
-
            
             Events.delete(req.params.id, event, (err, event) => {
             if (err) {
@@ -143,10 +130,6 @@ router.get("/cart", (req, res) => {
         
             }
             })
-
-            //display cart with event associated to the current user
-            res.render("cart", {session})
-
         }
 
     })
@@ -194,19 +177,11 @@ router.post("/events/cart/:id", function(req, res){
         if (err) {
             res.render("error", {err})
         } else {
-        res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
-        
+        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+        res.render('newcart',session)
         }
     })
 })
-
-
-router.get("/events/cart/:id", function(req, res){
-    Events.getOne({id: req.params.id}, (err, event) => {
-       res.render('newcart',{event})
-    })
-})
-
 
 
 // SHOW CART (doesn't work OR DOES IT???)

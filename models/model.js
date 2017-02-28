@@ -144,11 +144,11 @@ class Model {
                             successMessage="UPDATED DATABASE"
                         }
                     }
-              }
-              if(successMessage == undefined) {
-                err = "Update unsuccessful"
-              }
-       
+                }
+        if(successMessage == undefined) {
+            err = "Update unsuccessful"
+        }
+
         cb(err, successMessage)
     }
 
@@ -241,9 +241,9 @@ class Sessions extends Model{
         if (this.sessiondb == undefined) {
             err = "session not saved"
         }
-        console.log("Before return statement",sessionsarray) 
+        console.log("Before return statement",this.sessiondb) 
         
-         cb(err,sessiondb)
+         cb(err,this.sessiondb)
     }
 
 }
