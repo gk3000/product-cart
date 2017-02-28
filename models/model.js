@@ -39,7 +39,6 @@ class Model {
         } else {
             err = validatedObj;
         }
-        console.log('err: ', err, 'validatedObj: ', validatedObj)
         cb(err, validatedObj);
     }
 
@@ -48,10 +47,7 @@ class Model {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
 
-        console.log('THIS in validate function: ', this)
-
         for (var x in schema) {
-            console.log('OBJ FROM VALIDATE FUNCTION: ', obj)
             if (schema[x].unique){
                 for (var ele of this.db) {
                     if (ele[x] === obj[x]) {
@@ -79,7 +75,6 @@ class Model {
                 }
             }
         };
-        console.log('NEWOBJ FROM VALIDATE FUNCTION: ', newObj)
         return Object.keys(err).length === 0 ? [newObj, true] : [err, false];
     }
 

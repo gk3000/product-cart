@@ -39,6 +39,4 @@ Events.db = [
     }
 ]
 
-console.log('EVENTS IN EVENTS.JS: ', Events)
-
 module.exports = Events;
