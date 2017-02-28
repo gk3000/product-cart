@@ -15,7 +15,7 @@
 					<% }) %>
 				<p class="pull-right"><strong>Price: </strong>€<%= event.price %></p>
 				<hr>
-				<p><%= event.description.slice(0, 100) %>...</p>
+				<p><%= event.description.slice(0, 100) %>(...)</p>
 				<a class="btn btn-primary" href="/events/cart/<%= event.id%>">Add to cart</a>
 				<a type="button" class="btn btn-danger" href="/events/delete/<%= event.id%>">Delete</a>
 				<a type="button" class="btn btn-success" href ="/events/update/<%=event.id%>">Update</a>

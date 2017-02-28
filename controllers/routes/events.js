@@ -15,6 +15,7 @@ Sessions.db = [
 router.get('/', function(req, res) {
     res.redirect('/events')
 })    
+
 // SHOW ALL EVENTS (works)
 router.get("/events", function(req, res) {
     Events.getAll( (err, events) =>{ 
@@ -47,8 +48,8 @@ router.get('/events/search', function(req, res) {
 
 // SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
-    var err = {};
     // newEvent is for testing purposes
+    console.log('EVENTS DB: ', Events.db)
     var newEvent = {
             name: 'Code event',
             startDate: '01/01/17',
@@ -68,21 +69,19 @@ router.post('/events/new', (req, res) => {
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
-        subjects = req.body.subjects === '' ? null : req.body.subjects.split(','),
-        type = req.body.type === '' ? null :req.body.type.split(','),
+        subjects = req.body.subjects === '' ? null : req.body.subjects.split(', '),
+        type = req.body.type === '' ? null : req.body.type.split(', '),
         image = req.body.image,
         price = parseInt(req.body.price),
         description = req.body.description,
 
         newEvent = {name, startDate, endDate, subjects, type, image, price, description};
-        console.log('subjects after splitting: ', subjects)
     Events.save(newEvent, (err, event) => {
         if (err) {
             newEvent = {name, startDate, endDate, subjects, type, image, price, description}
-            console.log(newEvent)
             res.render('new', {newEvent, err})
         } else {
-            console.log('SUCCESSFULLY SAVED')
+            console.log('err: ', err, 'event: ', event)
             res.redirect('/events')
         }
     })

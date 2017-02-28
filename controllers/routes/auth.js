@@ -1,9 +1,9 @@
 var express      = require('express'),
     router       = express.Router(),
     app          = express(),
-    Events       = require('../../models/models/Events'),
     Sessions     = require('../../models/models/Sessions'),
-    Users		 = require('../../models/models/Users');
+    Users		 = require('../../models/models/Users'),
+    Events		 = require('../../models/models/Users')
 
 
 router.get('/', (req, res) => {

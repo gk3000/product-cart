@@ -1,17 +1,18 @@
 // this object is your mongoose
 class Model {
-    constructor (newSchema) {
+    constructor(newSchema) {
         this.db = []
         this.sessiondb = []
-        this.schema = {}
         this.currentID = 3; // bc of hardcoded events
-        this.setSchema(newSchema, (err, schema) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('SCHEMA SUCCESSFULLY ADDED')
-            }
-        })
+        this.schema = newSchema;
+
+        // setSchema(newSchema, (err, schema) => {
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log('SCHEMA SUCCESSFULLY ADDED')
+        //     }
+        // })
     }
 
     type(obj) {
@@ -46,7 +47,11 @@ class Model {
     validate(obj) {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
+
+        console.log('THIS in validate function: ', this)
+
         for (var x in schema) {
+            console.log('OBJ FROM VALIDATE FUNCTION: ', obj)
             if (schema[x].unique){
                 for (var ele of this.db) {
                     if (ele[x] === obj[x]) {
@@ -74,7 +79,7 @@ class Model {
                 }
             }
         };
-
+        console.log('NEWOBJ FROM VALIDATE FUNCTION: ', newObj)
         return Object.keys(err).length === 0 ? [newObj, true] : [err, false];
     }
 
@@ -215,7 +220,7 @@ class Model {
     }
 }    
 
-class Sessions extends Model{
+class Sessions extends Model {
     constructor (newSchema) {
         super()
         this.sessiondb = []
@@ -255,4 +260,4 @@ class Sessions extends Model{
 
 }
 module.exports = Model;
-module.exports = Sessions;
+// module.exports = Sessions;

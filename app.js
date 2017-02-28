@@ -31,16 +31,16 @@ app.locals = {
 var Sessions = require('./models/models/Sessions')
 
 app.use((req, res, next) => {
-	console.log('req.cookies: ', req.cookies)
+	// console.log('req.cookies: ', req.cookies)
 	if (!app.locals.session) {
 		Sessions.save({}, (err, session) => {
 			if (err) {
 				console.log(err);
 			} else {
 				app.locals.session = session;
-				console.log(session)
+				// console.log(session)
 				res.cookie('sessionID', session.id, { maxAge: 100000, httpOnly: false })
-				console.log('NEW COOKIE WAS CREATED')
+				// console.log('NEW COOKIE WAS CREATED')
 			}
 		})
 	} else if (app.locals.session && !req.cookies.sessionID){
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 			}
 		})
 	} else {
-		console.log('OLD COOKIE: ', req.cookies)
+		// console.log('OLD COOKIE: ', req.cookies)
 	}
 	next()
 })

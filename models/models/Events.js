@@ -24,6 +24,7 @@ Events.db = [
         description: 'This is a code camp',
         price: 3000
     },
+
     {
         id: 2,
         eventIDs : 2,
@@ -37,5 +38,7 @@ Events.db = [
         price: 300
     }
 ]
+
+console.log('EVENTS IN EVENTS.JS: ', Events)
 
 module.exports = Events;
