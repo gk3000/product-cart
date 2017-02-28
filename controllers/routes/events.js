@@ -3,8 +3,6 @@ var express      = require('express'),
     Events       = require('../../models/models/Events'),
     Sessions     = require('../../models/models/Sessions')
 
-var user = {}, session = {}, event = {};
-
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -83,7 +81,7 @@ router.post("/cart/:id", function(req, res){
         if (err) {
             res.render("error", {err})
         } else {
-        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+        //res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
         }
     })
 })
@@ -92,14 +90,14 @@ router.post("/cart/:id", function(req, res){
 // SHOW CART (doesn't work OR DOES IT???)
 router.get("/cart", (req, res) => {
     // if session (from req.cookies.sessionID) exists 
-    Sessions.getOne(req.cookies.sessionID, (err, session) => {
-        if (err) {
-            res.render("error", {err})
-        } else {
-            //display cart with event associated to the current user
-            res.render("cart", {session})
-        }
-    })
+    // Sessions.getOne(req.cookies.sessionID, (err, session) => {
+    //     if (err) {
+    //         res.render("error", {err})
+    //     } else {
+    //         //display cart with event associated to the current user
+    //         res.render("cart", {session})
+    //     }
+    // })
 
 })
 

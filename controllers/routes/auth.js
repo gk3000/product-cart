@@ -1,5 +1,6 @@
 var express      = require('express'),
     router       = express.Router(),
+    app          = express(),
     Events       = require('../../models/models/Events'),
     Sessions     = require('../../models/models/Sessions'),
     Users		 = require('../../models/models/Users');
@@ -17,19 +18,17 @@ router.post('/login', (req, res) => {
 	var username = req.body.username,
 		password = req.body.password;
 
-	Users.getOne({username}, (err, user) => {
+	Users.login({username, password}, (err, user) => {
 		if (err) {
-			console.log(err)
-			res.render('login', {err})
+			res.render('login', {err, user})
 		} else {
-			var userID = user.id;
-			Sessions.save({userID}, (err, session) => {
+			Sessions.update(req.app.locals.session.id, {userID: user.id, username: user.username}, (err, session) => {
 				if (err) {
+					console.log(err)
 					var err = {msg: 'Something went wrong. Please try again later.'}
-					res.render('register', {err})
+					res.render('login', {err})
 				} else {
-					console.log(session)
-					res.render('user', {user, session})
+					res.render('user')
 				}
 			})
 		}
@@ -48,18 +47,17 @@ router.post('/register', (req, res) => {
 			user = {username, password}
 			res.render('register', {err, user})
 		} else {
-			var userID = user.id;
-			Sessions.save({userID}, (err, session) => {
+			console.log('req.app.locals: ', req.app.locals)
+			Sessions.update(req.app.locals.session.id, {userID: user.id, username: user.username}, (err, session) => {
 				if (err) {
 					var err = {msg: 'Something went wrong. Please try again later.'}
 					res.render('register', {err})
 				} else {
-					res.render('user', {user, session})
+					res.render('user')
 				}
 			})
 		}
 	})
-
 })
 
 module.exports = router;

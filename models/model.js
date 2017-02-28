@@ -43,7 +43,6 @@ class Model {
     validate(obj) {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
-        console.log('obj in validate: ', obj)
         for (var x in schema) {
             if (schema[x].unique){
                 for (var ele of this.db) {
@@ -82,21 +81,25 @@ class Model {
     }
 
     getOne(obj, cb) {
-        var err, type = this.type;
-        var objKey = Object.keys(obj)[0];
-        var objVal = obj[objKey];
-        
-        if (type(obj) !== 'object') {
-            var err = 'Missing obj argument'
-            console.log(err)
-            cb(err);
-        } else {
-            for (var ele of this.db) {
-                if (ele[objKey] == objVal) {
-                    return cb(err, ele);
+        var err = {}, type = this.type;
+        var objKeys = Object.keys(obj);
+        var count = 0;
+        var objLength = objKeys.length;
+
+        for (var ele of this.db) {
+            objKeys.forEach(key => {
+                if (ele[key] === obj[key]) {
+                 count++
                 }
+            })
+
+            if (count === objLength) {
+                return cb(err = null, ele)
             }
         }
+
+        err = "Object not found."
+        cb(err)
     }
 
     delete(obj, cb) {
@@ -127,12 +130,21 @@ class Model {
                 
 
     update(id, newObj, cb) {
-        var err;
-        var successMessage;
-        
-        newObj.id = id;
-        this.db.push(newObj); 
-        cb(err, successMessage);
+        console.log(id, newObj)
+        var err = {};
+
+        for (var ele of this.db) {
+            console.log('id: ', id, 'ele.id: ', ele.id)
+            if (id === ele.id) {
+                for (var key in newObj) {
+                    ele[key] = newObj[key];
+                }
+
+                return cb(err = null, ele)
+            }
+        }
+        err.msg = "Object not found."
+        cb(err);
     }
 };
 
