@@ -1,0 +1,21 @@
+<% include partials/header %>
+
+<h2>Login</h2>
+<form action="/user/login" method="POST">
+	<label>Username</label>
+	<% if (err.username) { %>
+		<p class="text-danger"><%= err.username %></p>
+	<% } %>
+	<input class="form-control" type="text"  name="username" value="<%= user.username %>">
+
+	<label>password</label>
+	<% if (err.password) { %>
+		<p class="text-danger"><%= err.password %></p>
+	<% } %>
+	<input class="form-control" type="password" name="password" value="<%= user.password %>"><br>
+
+	<input class="form-control" type="submit" value="Log in">
+</form>
+
+
+<% include partials/footer %>

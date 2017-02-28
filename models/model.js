@@ -25,7 +25,8 @@ class Model {
     }
 
     save(obj, cb) {
-        var err, validation = this.validate(obj);
+        var err;
+        var validation = this.validate(obj);
         var valid = validation[1];
         var validatedObj = validation[0];
 
@@ -37,7 +38,7 @@ class Model {
         } else {
             err = validatedObj;
         }
-
+        console.log('err: ', err, 'validatedObj: ', validatedObj)
         cb(err, validatedObj);
     }
 
@@ -45,7 +46,7 @@ class Model {
     validate(obj) {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
-
+        console.log('obj in validate: ', obj)
         for (var x in schema) {
             if (schema[x].unique){
                 for (var ele of this.db) {
@@ -59,7 +60,7 @@ class Model {
                 err[x] = 'Missing ' + x + ' element.'
             }
 
-            if (schema[x].type !== type(obj[x])) {
+            if (schema[x].type !== type(obj[x]) && obj[x]) {
                 newObj[x] = "Problem with object type of " + x + ". Expected type to be '" + schema[x].type + "', but it's '" + type(obj[x]) + "'"
             }
 

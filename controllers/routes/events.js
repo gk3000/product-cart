@@ -10,6 +10,10 @@ Sessions.db = [
     userID: 01
     }
 ]
+
+var user = {}, session = {}, event = {};
+
+
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -59,7 +63,7 @@ router.get("/events/new", (req, res) => {
             description: 'Description'
         }
 
-    res.render("new", {newEvent, err})
+    res.render("new", {newEvent})
 })
 
 // POST NEW EVENT (works)
@@ -114,12 +118,21 @@ router.get('/events/delete/:id', (req, res) => {
     })
 })
 
+
 router.post('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
+
+
+// SHOW CART (doesn't work OR DOES IT???)
+router.get("/cart", (req, res) => {
+    // if session (from req.cookies.sessionID) exists 
+    Sessions.getOne(req.cookies.sessionID, (err, session) => {
+
         if (err) {
                 console.log("err from getOne ",err);
                 
         } else {
+
            
             Events.delete(req.params.id, event, (err, event) => {
             if (err) {
@@ -130,6 +143,10 @@ router.post('/events/delete/:id', (req, res) => {
         
             }
             })
+
+            //display cart with event associated to the current user
+            res.render("cart", {session})
+
         }
 
     })

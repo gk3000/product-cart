@@ -17,8 +17,19 @@ app.use(cookieParser())
 // Public assets
 app.use('/public', express.static('public'))
 
+
 var authRoutes = require('./controllers/routes/auth.js');
 app.use('/user', authRoutes)
+
+// Sets default values to prevent crashing
+app.locals = {
+	user: {},
+	session: {},
+	event: {},
+	err: {},
+	events: {}
+}
+
 
 // Set up routes
 var eventRoutes = require('./controllers/routes/events.js');
