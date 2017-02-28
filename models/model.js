@@ -5,24 +5,10 @@ class Model {
         this.sessiondb = []
         this.currentID = 3; // bc of hardcoded events
         this.schema = newSchema;
-
-        // setSchema(newSchema, (err, schema) => {
-        //     if (err) {
-        //         console.log(err);
-        //     } else {
-        //         console.log('SCHEMA SUCCESSFULLY ADDED')
-        //     }
-        // })
     }
 
     type(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
-    }
-
-    setSchema(newSchema, cb) {
-        this.schema = newSchema;
-        var err;
-        cb(err, newSchema);
     }
 
     save(obj, cb) {

@@ -47,7 +47,6 @@ router.post('/register', (req, res) => {
 			user = {username, password}
 			res.render('register', {err, user})
 		} else {
-			console.log('req.app.locals: ', req.app.locals)
 			Sessions.update(req.app.locals.session.id, {userID: user.id, username: user.username}, (err, session) => {
 				if (err) {
 					var err = {msg: 'Something went wrong. Please try again later.'}
@@ -56,6 +55,18 @@ router.post('/register', (req, res) => {
 					res.render('user')
 				}
 			})
+		}
+	})
+})
+
+router.get('/logout', (req, res) => {
+	Sessions.save({}, (err, session) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.cookie('sessionID', session.id, { maxAge: 100000, httpOnly: false });
+			req.app.locals.session = session;
+			res.redirect('/events')
 		}
 	})
 })
