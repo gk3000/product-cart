@@ -2,6 +2,7 @@
 class Model {
     constructor (newSchema) {
         this.db = []
+        this.sessiondb = []
         this.schema = {}
         this.currentID = 3; // bc of hardcoded events
         this.setSchema(newSchema, (err, schema) => {
@@ -31,13 +32,15 @@ class Model {
         if (valid) {
             validatedObj.id = this.currentID;
             this.db.push(validatedObj); 
-            this.currentID++;   
+            this.currentID++; 
+
         } else {
             err = validatedObj;
         }
 
         cb(err, validatedObj);
     }
+
 
     validate(obj) {
         var schema = this.schema, type = this.type;
@@ -204,4 +207,44 @@ class Model {
     }
 }    
 
+class Sessions extends Model{
+    constructor (newSchema) {
+        super()
+        this.sessiondb = []
+    }
+
+    type(obj) {
+        return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    }
+    savesessions(obj, cb) {
+       
+        var sessionsarray = [];
+        if (type(obj) !== 'object') {
+                var err = 'Missing obj argument'
+                console.log(err)
+                return cb(err);
+        } else {
+                var idno = obj.eventIDs
+                console.log(idno)
+                this.sessiondb.push(idno)
+                console.log(sessiondb)
+                // event = this.getOne({id:idno},function(err,event){
+                //     console.log("From getone method sessiondb",event)
+                //     sessionsarray.push(event) 
+                //     console.log("After pushing in array if it is a string",sessionsarray)      
+              //  })
+                      
+                           
+        }
+
+        if (this.sessiondb == undefined) {
+            err = "session not saved"
+        }
+        console.log("Before return statement",sessionsarray) 
+        
+         cb(err,sessiondb)
+    }
+
+}
 module.exports = Model;
+module.exports = Sessions;

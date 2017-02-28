@@ -1,8 +1,15 @@
 var express      = require('express'),
     router       = express.Router(),
     Events       = require('../../models/models/Events'),
-    Sessions     = require('../../models/models/Sessions')
+    Sessions     = require('../../models/models/Sessions'),
+    Users        = require('../../models/models/Users')
 
+Sessions.db = [
+    {
+    events: [{id: 2, qty: 3}, {id: 1, qty: 4}],
+    userID: 01
+    }
+]
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -166,14 +173,23 @@ router.post('/events/update/:id', (req, res) => {
 
 
 router.post("/events/cart/:id", function(req, res){
-    Sessions.save({eventIDs: [req.params.id]}, (err, record) =>{
+    Sessions.savesessions({eventIDs: req.params.id}, (err, session) =>{
         if (err) {
             res.render("error", {err})
         } else {
-        res.cookie('sessionID', record._id, { maxAge: 9000000000, httpOnly: false })
+        res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
+        
         }
     })
 })
+
+
+router.get("/events/cart/:id", function(req, res){
+    Events.getOne({id: req.params.id}, (err, event) => {
+       res.render('newcart',{event})
+    })
+})
+
 
 
 // SHOW CART (doesn't work OR DOES IT???)
@@ -191,5 +207,64 @@ router.get("/events/cart", (req, res) => {
 })
 
 
+
+// // SHOW CART 
+// router.get("/cart", (req, res) => {
+//     // console.log("-----------Events.db---------", Events.db)
+//     res.render("newcart", {events: Events.db})
+    
+// })
+
+
+// POST /cart/update
+// Cart page with update the quantity of products
+//     renders the cart.ejs
+// args: post, sessionID, amount of products
+
+router.post("/cart/update/:id", (req, res) => {
+    console.log("--------new quantity--------", req.body.name)
+    var qty = req.body.name
+    Sessions.update(req.params.id, {qty: req.body.name}, (err, record) =>{
+        if (err) {
+            res.render("error", {err})
+        } else {
+            res.render("cart", {events: Events.db})
+        }
+    })
+})
+
+
+
+// CHECKOUT page
+router.get("/checkout/:total", (req, res) => {
+    total = req.params.total
+    res.render("checkout")
+})
+
+module.exports = router;
+
+
+
+
+
+/*
+
+
+POST /cart/remove
+Cart page with remove the product option
+    renders the cart.ejs
+args: post, sessionID, remove event
+
+GET /cart/coupon
+Cart page with apply the coupon option to get a discount
+    renders the cart.ejs
+args: get, coupon, discoun
+
+POST /checkout/pay
+args: post, sessionID
+– saves users billing details in the database
+– check if the terms & conditions are checked
+– redirects to/process the payment
+– redirects back to the root or displays the confirmation page*/
 module.exports = router;
 

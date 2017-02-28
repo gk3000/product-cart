@@ -14,6 +14,7 @@ var Events = new Model({
 Events.db = [
     {
         id: 1,
+        eventIDs : 1,
         name: "SuperCodeCamp",
         startDate: '27/05/2017, 08:00 AM',
         endDate: '27/08/2017, 08:00 PM',
@@ -25,6 +26,7 @@ Events.db = [
     },
     {
         id: 2,
+        eventIDs : 2,
         name: "Workshop",
         startDate: '27/05/2017, 08:00 AM',
         endDate: '28/05/2017, 08:00 PM',
