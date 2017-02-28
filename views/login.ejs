@@ -2,6 +2,10 @@
 
 <h2>Login</h2>
 <form action="/user/login" method="POST">
+	<% if (err.msg) { %>
+		<p class="text-danger"><%= err.msg %></p>
+	<% } %>
+	
 	<label>Username</label>
 	<% if (err.username) { %>
 		<p class="text-danger"><%= err.username %></p>

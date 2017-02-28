@@ -11,9 +11,6 @@ Sessions.db = [
     }
 ]
 
-var user = {}, session = {}, event = {};
-
-
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
@@ -109,18 +106,18 @@ router.get("/events/:id", function (req, res) {
 router.get('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
         if (err) {
-                console.log("err from getOne ",err);
-                
-        } else{
+                console.log("err from getOne ",err);      
+        } else {
             res.render('delete', {event});
             console.log(event)
         } 
+            res.render("error", {err})
     })
 })
 
 
-router.post('/events/delete/:id', (req, res) => {
-    Events.getOne({id: req.params.id}, (err, event) => {
+// router.post('/events/delete/:id', (req, res) => {
+//     Events.getOne({id: req.params.id}, (err, event) => {
 
 
 // SHOW CART (doesn't work OR DOES IT???)
@@ -150,7 +147,6 @@ router.get("/cart", (req, res) => {
         }
 
     })
-
 })
 
 
@@ -158,8 +154,13 @@ router.get("/cart", (req, res) => {
 // UPDATE EVENT
 //
 router.get('/events/update/:id', (req, res) => {
-    Events.getOne({id: req.params.id}, (err, event) => {
-        res.render('update', {event});
+    Events.getOne(req.params.id, (err, event) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(event)
+            res.render('update', {event});
+        }
     })
 })
 
@@ -180,12 +181,10 @@ router.post('/events/update/:id', (req, res) => {
         if (err) {
             console.log(err);
             res.redirect('/events/update/' + req.params.id)
-            
         } else {
             res.redirect('/events')
         }
     })
-
 })
 
 
@@ -194,8 +193,7 @@ router.post("/events/cart/:id", function(req, res){
         if (err) {
             res.render("error", {err})
         } else {
-        res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
-        
+            res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
         }
     })
 })
@@ -203,7 +201,7 @@ router.post("/events/cart/:id", function(req, res){
 
 router.get("/events/cart/:id", function(req, res){
     Events.getOne({id: req.params.id}, (err, event) => {
-       res.render('newcart',{event})
+       res.render('newcart', {event})
     })
 })
 
@@ -217,30 +215,15 @@ router.get("/events/cart", (req, res) => {
             res.render("error", {err})
         } else {
             //display cart with event associated to the current user
-            res.render("cart", records)
+            res.render("cart", {records})
         }
     })
-
 })
-
-
-
-// // SHOW CART 
-// router.get("/cart", (req, res) => {
-//     // console.log("-----------Events.db---------", Events.db)
-//     res.render("newcart", {events: Events.db})
-    
-// })
-
-
-// POST /cart/update
-// Cart page with update the quantity of products
-//     renders the cart.ejs
-// args: post, sessionID, amount of products
 
 router.post("/cart/update/:id", (req, res) => {
     console.log("--------new quantity--------", req.body.name)
-    var qty = req.body.name
+    var qty = req.body.name;
+
     Sessions.update(req.params.id, {qty: req.body.name}, (err, record) =>{
         if (err) {
             res.render("error", {err})
@@ -251,37 +234,10 @@ router.post("/cart/update/:id", (req, res) => {
 })
 
 
-
 // CHECKOUT page
 router.get("/checkout/:total", (req, res) => {
-    total = req.params.total
-    res.render("checkout")
+    total = req.params.total;
+    res.render("checkout");
 })
 
 module.exports = router;
-
-
-
-
-
-/*
-
-
-POST /cart/remove
-Cart page with remove the product option
-    renders the cart.ejs
-args: post, sessionID, remove event
-
-GET /cart/coupon
-Cart page with apply the coupon option to get a discount
-    renders the cart.ejs
-args: get, coupon, discoun
-
-POST /checkout/pay
-args: post, sessionID
-– saves users billing details in the database
-– check if the terms & conditions are checked
-– redirects to/process the payment
-– redirects back to the root or displays the confirmation page*/
-module.exports = router;
-
