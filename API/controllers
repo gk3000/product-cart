@@ -39,3 +39,25 @@ CONTROLLERS/ROUTES/EVENTS.JS
         - saves billing details in the db
         - redirects to website where payment will be made (e.g. PayPal)
         - renders confirmation.ejs
+
+
+
+
+
+
+POST /cart/remove
+Cart page with remove the product option
+    renders the cart.ejs
+args: post, sessionID, remove event
+
+GET /cart/coupon
+Cart page with apply the coupon option to get a discount
+    renders the cart.ejs
+args: get, coupon, discoun
+
+POST /checkout/pay
+args: post, sessionID
+– saves users billing details in the database
+– check if the terms & conditions are checked
+– redirects to/process the payment
+– redirects back to the root or displays the confirmation page

@@ -24,6 +24,7 @@ Events.db = [
         description: 'This is a code camp',
         price: 3000
     },
+
     {
         id: 2,
         eventIDs : 2,

@@ -10,10 +10,12 @@ Sessions.db = [
     userID: 01
     }
 ]
+
 // INDEX PAGE
 router.get('/', function(req, res) {
     res.redirect('/events')
 })    
+
 // SHOW ALL EVENTS (works)
 router.get("/events", function(req, res) {
     Events.getAll( (err, events) =>{ 
@@ -46,8 +48,8 @@ router.get('/events/search', function(req, res) {
 
 // SHOW FORM FOR CREATING NEW EVENTS (works)
 router.get("/events/new", (req, res) => {
-    var err = {};
     // newEvent is for testing purposes
+    console.log('EVENTS DB: ', Events.db)
     var newEvent = {
             name: 'Code event',
             startDate: '01/01/17',
@@ -59,7 +61,7 @@ router.get("/events/new", (req, res) => {
             description: 'Description'
         }
 
-    res.render("new", {newEvent, err})
+    res.render("new", {newEvent})
 })
 
 // POST NEW EVENT (works)
@@ -67,21 +69,19 @@ router.post('/events/new', (req, res) => {
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
-        subjects = req.body.subjects === '' ? null : req.body.subjects.split(','),
-        type = req.body.type === '' ? null :req.body.type.split(','),
+        subjects = req.body.subjects === '' ? null : req.body.subjects.split(', '),
+        type = req.body.type === '' ? null : req.body.type.split(', '),
         image = req.body.image,
         price = parseInt(req.body.price),
         description = req.body.description,
 
         newEvent = {name, startDate, endDate, subjects, type, image, price, description};
-        console.log('subjects after splitting: ', subjects)
     Events.save(newEvent, (err, event) => {
         if (err) {
             newEvent = {name, startDate, endDate, subjects, type, image, price, description}
-            console.log(newEvent)
             res.render('new', {newEvent, err})
         } else {
-            console.log('SUCCESSFULLY SAVED')
+            console.log('err: ', err, 'event: ', event)
             res.redirect('/events')
         }
     })
@@ -105,35 +105,55 @@ router.get("/events/:id", function (req, res) {
 router.get('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
         if (err) {
-                console.log("err from getOne ",err);
-                
-        } else{
+                console.log("err from getOne ",err);      
+        } else {
             res.render('delete', {event});
             console.log(event)
         } 
+            res.render("error", {err})
     })
 })
 
+
 router.post('/events/delete/:id', (req, res) => {
     Events.getOne({id: req.params.id}, (err, event) => {
+        Events.delete(req.params.id,event, (err,record) =>{
+             if (err) {
+                console.log("err from Delete ",err);      
+            } else {
+                res.redirect('/events')
+            }    
+
+        })
+})
+})
+
+// router.post('/events/delete/:id', (req, res) => {
+//     Events.getOne({id: req.params.id}, (err, event) => {
+
+
+// SHOW CART (doesn't work OR DOES IT???)
+router.get("/cart", (req, res) => {
+    // if session (from req.cookies.sessionID) exists 
+    Sessions.getOne(req.cookies.sessionID, (err, session) => {
+
         if (err) {
                 console.log("err from getOne ",err);
                 
         } else {
            
             Events.delete(req.params.id, event, (err, event) => {
-            if (err) {
-                console.log(err);
-                
-            } else {
-                res.redirect('/events')
-        
-            }
+                if (err) {
+                    console.log(err);
+                    
+                } else {
+                    res.redirect('/events')
+            
+                }
             })
         }
 
     })
-
 })
 
 
@@ -141,8 +161,13 @@ router.post('/events/delete/:id', (req, res) => {
 // UPDATE EVENT
 //
 router.get('/events/update/:id', (req, res) => {
-    Events.getOne({id: req.params.id}, (err, event) => {
-        res.render('update', {event});
+    Events.getOne(req.params.id, (err, event) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(event)
+            res.render('update', {event});
+        }
     })
 })
 
@@ -163,18 +188,35 @@ router.post('/events/update/:id', (req, res) => {
         if (err) {
             console.log(err);
             res.redirect('/events/update/' + req.params.id)
-            
         } else {
             res.redirect('/events')
         }
     })
-
 })
+
 
 
 router.get("/events/cart/:id", function(req, res){
     Events.getOne({id: req.params.id}, (err, event) => {
         res.render('newcart', {event});
+    })
+})        
+
+router.post("/events/cart/:id", function(req, res){
+    Sessions.savesessions({eventIDs: req.params.id}, (err, session) =>{
+        if (err) {
+            res.render("error", {err})
+        } else {
+            res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
+        }
+    })
+})
+
+
+router.get("/events/cart/:id", function(req, res){
+    Events.getOne({id: req.params.id}, (err, event) => {
+       res.render('newcart', {event})
+
     })
 })
 
@@ -204,30 +246,15 @@ router.get("/events/cart", (req, res) => {
             res.render("error", {err})
         } else {
             //display cart with event associated to the current user
-            res.render("cart", records)
+            res.render("cart", {records})
         }
     })
-
 })
-
-
-
-// // SHOW CART 
-// router.get("/cart", (req, res) => {
-//     // console.log("-----------Events.db---------", Events.db)
-//     res.render("newcart", {events: Events.db})
-    
-// })
-
-
-// POST /cart/update
-// Cart page with update the quantity of products
-//     renders the cart.ejs
-// args: post, sessionID, amount of products
 
 router.post("/cart/update/:id", (req, res) => {
     console.log("--------new quantity--------", req.body.name)
-    var qty = req.body.name
+    var qty = req.body.name;
+
     Sessions.update(req.params.id, {qty: req.body.name}, (err, record) =>{
         if (err) {
             res.render("error", {err})
@@ -238,37 +265,10 @@ router.post("/cart/update/:id", (req, res) => {
 })
 
 
-
 // CHECKOUT page
 router.get("/checkout/:total", (req, res) => {
-    total = req.params.total
-    res.render("checkout")
+    total = req.params.total;
+    res.render("checkout");
 })
 
 module.exports = router;
-
-
-
-
-
-/*
-
-
-POST /cart/remove
-Cart page with remove the product option
-    renders the cart.ejs
-args: post, sessionID, remove event
-
-GET /cart/coupon
-Cart page with apply the coupon option to get a discount
-    renders the cart.ejs
-args: get, coupon, discoun
-
-POST /checkout/pay
-args: post, sessionID
-– saves users billing details in the database
-– check if the terms & conditions are checked
-– redirects to/process the payment
-– redirects back to the root or displays the confirmation page*/
-module.exports = router;
-

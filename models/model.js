@@ -1,17 +1,18 @@
 // this object is your mongoose
 class Model {
-    constructor (newSchema) {
+    constructor(newSchema) {
         this.db = []
         this.sessiondb = []
-        this.schema = {}
         this.currentID = 3; // bc of hardcoded events
-        this.setSchema(newSchema, (err, schema) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('SCHEMA SUCCESSFULLY ADDED')
-            }
-        })
+        this.schema = newSchema;
+
+        // setSchema(newSchema, (err, schema) => {
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log('SCHEMA SUCCESSFULLY ADDED')
+        //     }
+        // })
     }
 
     type(obj) {
@@ -38,7 +39,6 @@ class Model {
         } else {
             err = validatedObj;
         }
-        console.log('err: ', err, 'validatedObj: ', validatedObj)
         cb(err, validatedObj);
     }
 
@@ -46,7 +46,7 @@ class Model {
     validate(obj) {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
-        console.log('obj in validate: ', obj)
+
         for (var x in schema) {
             if (schema[x].unique){
                 for (var ele of this.db) {
@@ -75,7 +75,6 @@ class Model {
                 }
             }
         };
-
         return Object.keys(err).length === 0 ? [newObj, true] : [err, false];
     }
 
@@ -85,22 +84,30 @@ class Model {
     }
 
     getOne(obj, cb) {
-        var err, type = this.type;
-        var objKey = Object.keys(obj)[0];
-        var objVal = obj[objKey];
-        var element = {}
-        
-        // if (type(obj) !== 'object') {
-        //     var err = 'Missing obj argument'
-        //     console.log(err)
-        //     return cb(err,element);
-        // } else {
-            for (var ele of this.db) {
-                if (ele[objKey] == objVal) {
-                    return cb(err, ele);
+        console.log('obj before if: ', obj)
+        if (typeof obj === 'string') {
+            obj = {id: obj};
+        }
+        console.log('obj after if: ', obj)
+        var err = {}, type = this.type;
+        var objKeys = Object.keys(obj);
+        var objLength = objKeys.length;
+
+        for (var ele of this.db) {
+            var count = 0;
+            objKeys.forEach(key => {
+                if (ele[key] == obj[key]) {
+                 count++
                 }
+            })
+
+            if (count === objLength) {
+                return cb(err = null, ele)
             }
-        // }
+        }
+
+        err = "Object not found."
+        cb(err)
     }
 
     delete(id,obj, cb) {
@@ -209,4 +216,42 @@ class Model {
 }    
 
 
+class Sessions extends Model {
+    constructor (newSchema) {
+        super()
+        this.sessiondb = []
+    }
+
+    type(obj) {
+        return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    }
+    savesessions(obj, cb) {
+       
+        var sessionsarray = [];
+        if (type(obj) !== 'object') {
+                var err = 'Missing obj argument'
+                console.log(err)
+                return cb(err);
+        } else {
+                var idno = obj.eventIDs
+                console.log(idno)
+                this.sessiondb.push(idno)
+                console.log(sessiondb)
+                // event = this.getOne({id:idno},function(err,event){
+                //     console.log("From getone method sessiondb",event)
+                //     sessionsarray.push(event) 
+                //     console.log("After pushing in array if it is a string",sessionsarray)      
+              //  })
+                      
+                           
+        }
+
+        if (this.sessiondb == undefined) {
+            err = "session not saved"
+        }
+        console.log("Before return statement",sessionsarray) 
+        
+         cb(err,sessiondb)
+    }
+}
 module.exports = Model;
