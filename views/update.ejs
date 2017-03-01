@@ -1,0 +1,23 @@
+<% include partials/header %>
+<h2>Update event</h2>
+<form action="/events/update/<%= event.id %>" method="post">
+	<label>Event name</label>
+	<input class="form-control" type="text" name="name" value="<%= event.name %>">
+	<label>Start date</label>
+	<input class="form-control" type="text" name="startdate" value="<%= event.startDate %>">
+	<label>End date</label>
+	<input class="form-control" type="text" name="enddate" value="<%= event.endDate %>">
+	<label>Subjects (separate with comma)</label>
+	<input class="form-control" type="text" name="subjects" value="<%= event.subjects %>">
+	<label>Type(s) (separate with comma)</label>
+	<input class="form-control" type="text" name="type" value="<%= event.type %>">
+	<label>Image URL</label>
+	<input class="form-control" type="text" name="image" value="<%= event.image %>">
+	<label>Price (€)</label>
+	<input class="form-control" type="text" name="price" value="<%= event.price %>">
+	<label>Description</label>
+	<textarea name="description" class="form-control"><%= event.description %></textarea><br>
+	<input class="form-control" type="submit" value="Update event">
+</form>
+
+<% include partials/footer %>

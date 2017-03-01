@@ -1,0 +1,41 @@
+CONTROLLERS/ROUTES/EVENTS.JS
+
+    GET /events   
+        - displays all events
+        - passes array ('events') that contains all the event objects from the database
+        - renders index.ejs
+
+    GET /events/:id
+        - displays a single event
+        - passes object ('event') that contains information about the event that matches the :id param
+        - renders show.ejs
+
+    GET /cart
+        - displays the events the client has selected
+        - information about selected tickets and the client is stored in an object ('session')
+        - renders cart.ejs
+
+    POST /cart/:id
+        - creates new session object
+        - adds event reference to session object
+        - creates new cookie with sessionID equal to session._id
+        - redirects to /cart
+
+    POST /cart/update
+        - displays the updated cart, with values specified by client at get:cart
+        - renders cart.ejs with updated values
+
+    POST /cart/remove
+        - removes all selected tickets from cart
+        - rerenders cart without any items
+
+    GET /checkout
+        - displays checkout page
+        - information about the client and the purchase is passed through the 'session' object
+        - renders checkout.ejs
+
+    POST /checkout
+        - checks if terms & conditions are checked
+        - saves billing details in the db
+        - redirects to website where payment will be made (e.g. PayPal)
+        - renders confirmation.ejs

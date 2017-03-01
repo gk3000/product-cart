@@ -1,151 +1,139 @@
-// this object is your mongoose
-var model = {};
-// your mongoDB
-model.db = [];
-// each import of 'model' will support one schema
-model.schema = {};
-model.currentID = 0;
-// ______________________ //
- // todo:  define schema design
-// ________________________//
-// model.setSchema(schema, CB):
-//     takes a callback and an object
-//     sets model.schema to schema
-//     executes callback with array if successful, with error if not
+// this object is your mongoose
+class Model {
+    constructor (newSchema) {
+        this.db = []
+        this.schema = {}
+        this.currentID = 3; // bc of hardcoded events
+        this.setSchema(newSchema, (err, schema) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('SCHEMA SUCCESSFULLY ADDED')
+            }
+        })
+    }
 
-model.type = function(obj) {
+    type(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
     }
 
-model.setSchema = function(newSchema, cb) {
-    this.schema = newSchema;
-    console.log('This after setSchema', this)
-    var err;
-    cb(err, newSchema);
-};
+    setSchema(newSchema, cb) {
+        this.schema = newSchema;
+        var err;
+        cb(err, newSchema);
+    }
 
-model.validate = function(obj){
-    //console.log(obj)
-    var schema = this.schema;
-    var type = this.type;
-    //console.log('THIS:  ', this)
-    var newObj ={}; 
-    schemaKeys = Object.keys(schema)
-    var err = {}
+    save(obj, cb) {
+        var err;
+        var validation = this.validate(obj);
+        var valid = validation[1];
+        var validatedObj = validation[0];
 
-    for (var x in schema) {
-
-    	if (schema[x].unique){
-    		for (var ele of this.db) {
-    			if (ele[x] === obj[x]) {
-    				err.duplicate = "Duplicate name: " + x
-    			}
-    		} 
-    	}
-
-    	//console.log(schema[x].type, type(obj[x]))
-        if(schema[x].type === type(obj[x])){
-        	  newObj[x]=obj[x];
-            if  (schema[x].type === "array") {
-            	obj[x].forEach(function(y){
-            		if (schema[x].subType = type(y)) {
-                        newObj[x].push(y);
-                    }
-            	})
-                    	
-			}
-        
-        } else if (!obj[x] && schema[x].required === true) {
-        	return "Missing element from object"
+        if (valid) {
+            validatedObj.id = this.currentID;
+            this.db.push(validatedObj); 
+            this.currentID++;   
         } else {
-            return "problem with object type of " + x
+            err = validatedObj;
         }
-    };
-    //console.log("reached end of function")
-    return newObj
-}
+        console.log('err: ', err, 'validatedObj: ', validatedObj)
+        cb(err, validatedObj);
+    }
 
-// model.getAll(CB):
-//     takes a callback
-//     retrieves all objects into an array
-//     executes callback with array if successful, with error if not
-model.getAll = function(cb) {
-    var err = null;
-    cb(err, this.db);
-};
+    validate(obj) {
+        var schema = this.schema, type = this.type;
+        var newObj = {}, err = {}
+        console.log('obj in validate: ', obj)
+        for (var x in schema) {
+            if (schema[x].unique){
+                for (var ele of this.db) {
+                    if (ele[x] === obj[x]) {
+                        err[x] = ele[x] + ' already exists.'
+                    }
+                } 
+            }
 
-//  model.getOne(ID, CB):
-//     takes a callback and an ID
-//     retrieves the object with that ID
-//     executes callback with object if successful, with error if not
+            if (!obj[x] && schema[x].required === true) {
+                err[x] = 'Missing ' + x + ' element.'
+            }
 
+            if (schema[x].type !== type(obj[x]) && obj[x]) {
+                newObj[x] = "Problem with object type of " + x + ". Expected type to be '" + schema[x].type + "', but it's '" + type(obj[x]) + "'"
+            }
 
-model.getOne = function(obj, cb) {
-    var err = null;
-    var objKey = Object.keys(obj);
-    var objVal = obj[objKey];
-    var foundObj = null;
-    var type = this.type;
-    
-    if (type(obj) !== 'object') {
-        var err = 'Missing obj argument'
-        cb(err);
-    } else {
-        for (var ele of this.db) {
-            if (ele[objKey] === objVal) {
-                cb(err, ele);
+            if(schema[x].type === type(obj[x])){
+                  newObj[x] = obj[x];
+                if (schema[x].type === "array") {
+                    obj[x].forEach(function(y){
+                        if (schema[x].subType !== type(y)) {
+                            err[x] = 'Wrong subtype of ' + x + ' element.'
+                        }
+                    })
+                }
+            }
+        };
+
+        return Object.keys(err).length === 0 ? [newObj, true] : [err, false];
+    }
+
+    getAll(cb) {
+        var err;
+        cb(err, this.db);
+    }
+
+    getOne(obj, cb) {
+        var err, type = this.type;
+        var objKey = Object.keys(obj)[0];
+        var objVal = obj[objKey];
+        
+        if (type(obj) !== 'object') {
+            var err = 'Missing obj argument'
+            console.log(err)
+            cb(err);
+        } else {
+            for (var ele of this.db) {
+                if (ele[objKey] == objVal) {
+                    return cb(err, ele);
+                }
             }
         }
     }
-    // logic that selects the right oject from the db
-    // assign it to sentObj;
-};
-//  model.save(obj, CB):
-//     takes a callback and a new object
-//     attempts to save object to database
-//     executes callback with error or success status
 
-model.save = function(obj, cb) {
-    var err;
-    var successMessage;
-    var validated = this.type(this.validate(obj)) === 'object';
+    delete(obj, cb) {
+        var err = null;
+        var successMessage= null;
+            
+            if (type(obj) !== 'object') {
+                var err = 'Missing obj argument'
+            } else {
+                for (var i =0; i < this.db.length; i++)
+                if (this.bd[i].currentID === obj.currentID) {
+                    this.db.splice(i,1);
+                  break;
+                }
+                   var successMessage = "Deleted successfully"
+            }
 
-    if (validated) {
-	    obj.id = this.currentID;
-    	this.db.push(obj); 
-    	this.currentID++; 
-    	successMessage = 'saved new object'   	
-    } else {
-    	err = this.validate(obj);
+                
+                
+                    // if they aren't tne same size they aren't the same thing
+                    // if they are the same size and do n't have the same properties, they arent' the same
+                    // if they are the same, delete
+            
+             cb(err,successMessage)
+            // logic that selects the right oject from the db
+            // assign it to sentObj;
+        }
+                
+
+    update(id, newObj, cb) {
+        var err;
+        var successMessage;
+        
+        newObj.id = id;
+        this.db.push(newObj); 
+        cb(err, successMessage);
     }
-    cb(err, successMessage);
-}
-
-//  model.delete(ID, CB):
-//     takes a callback and an ID
-//     attempts to delete item from DB
-//     executes callback with error or success status
-model.delete = function(obj, cb) {
-    var err = null;
-    var successMessage= null;
-    
-    // logic to find the matching item and delete it
-
-    cb(err, successMessage);
-};
-//  model.update(ID, newObj, cb):
-//     takes a callback and an id and a new property  
-//     attempts to update existing object
-//     executes callback with error or success status
-model.update = function(id, newObj, cb) {
-    var err;
-    var successMessage;
-    
-    newObj.id = id;
-    // find old item from this.db by id
-    // delete that item
-    this.db.push(newObj); 
-    cb(err, successMessage);
 };
 
-module.exports = model;
+module.exports = Model;
