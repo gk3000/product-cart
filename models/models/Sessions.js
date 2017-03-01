@@ -5,4 +5,6 @@ var Sessions = new Model({
     userID: {type: 'number'}
 })
 
+
+
 module.exports = Sessions;
