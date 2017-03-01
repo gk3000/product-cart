@@ -5,6 +5,7 @@ var Sessions = new Model({
     userID: {type: 'number'}
 })
 
+
 Sessions.db = [
     {
     events: [{id: 2, qty: 3}, {id: 1, qty: 4}],

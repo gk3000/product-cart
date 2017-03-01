@@ -89,7 +89,6 @@ router.post('/events/new', (req, res) => {
             newEvent = {name, startDate, endDate, subjects, type, image, price, description}
             res.render('new', {newEvent, err})
         } else {
-            console.log('err: ', err, 'event: ', event)
             res.redirect('/events')
         }
     })
@@ -123,6 +122,19 @@ router.get('/events/delete/:id', (req, res) => {
 })
 
 
+router.post('/events/delete/:id', (req, res) => {
+    Events.getOne({id: req.params.id}, (err, event) => {
+        Events.delete(req.params.id,event, (err,record) =>{
+             if (err) {
+                console.log("err from Delete ",err);      
+            } else {
+                res.redirect('/events')
+            }    
+
+        })
+})
+})
+
 // router.post('/events/delete/:id', (req, res) => {
 //     Events.getOne({id: req.params.id}, (err, event) => {
 
@@ -136,21 +148,16 @@ router.get("/cart", (req, res) => {
                 console.log("err from getOne ",err);
                 
         } else {
-
            
             Events.delete(req.params.id, event, (err, event) => {
-            if (err) {
-                console.log(err);
-                
-            } else {
-                res.redirect('/events')
-        
-            }
+                if (err) {
+                    console.log(err);
+                    
+                } else {
+                    res.redirect('/events')
+            
+                }
             })
-
-            //display cart with event associated to the current user
-            res.render("cart", {session})
-
         }
 
     })
@@ -195,6 +202,13 @@ router.post('/events/update/:id', (req, res) => {
 })
 
 
+
+router.get("/events/cart/:id", function(req, res){
+    Events.getOne({id: req.params.id}, (err, event) => {
+        res.render('newcart', {event});
+    })
+})        
+
 router.post("/events/cart/:id", function(req, res){
     Sessions.savesessions({eventIDs: req.params.id}, (err, session) =>{
         if (err) {
@@ -209,9 +223,26 @@ router.post("/events/cart/:id", function(req, res){
 router.get("/events/cart/:id", function(req, res){
     Events.getOne({id: req.params.id}, (err, event) => {
        res.render('newcart', {event})
+
     })
 })
 
+router.get('/cart/update/:id', function (req, res) {
+    // If it's not showing up, just use req.body to see what is actually being passed.
+    console.log(req.body.changeQuantity);
+});
+// router.post("/events/cart/:id", function(req, res){
+//     var changequatity = req.body.changeQuantity
+//     console.log(changequatity)
+//     res.redirect("/cart/update/:id")
+//     // Sessions.savesessions({eventIDs: req.params.id}, (err, session) =>{
+//     //     if (err) {
+//     //         res.render("error", {err})
+//     //     } else {
+//     //     res.cookie('sessionID', session.eventIDs, { maxAge: 9000000000, httpOnly: false })
+//     //     }
+//     // })
+// })
 
 
 // SHOW CART (doesn't work OR DOES IT???)

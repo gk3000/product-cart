@@ -123,7 +123,6 @@ class Model {
     update(id, newObj, cb) {
         var successMessage, newObj, err;
         //console.log("id: ", typeof id)
-        
         for (var i =0; i < this.db.length; i++){
              // console.log("Enterd into the loop "  + typeof this.db[i].id)
             if (this.db[i].id === parseInt(id)) {
@@ -194,6 +193,7 @@ class Model {
     }
 }    
 
+
 class Sessions extends Model {
     constructor (newSchema) {
         super()
@@ -231,7 +231,5 @@ class Sessions extends Model {
         
          cb(err,sessiondb)
     }
-
 }
 module.exports = Model;
-// module.exports = Sessions;
