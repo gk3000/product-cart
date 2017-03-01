@@ -4,12 +4,21 @@ var express      = require('express'),
     Sessions     = require('../../models/models/Sessions'),
     Users        = require('../../models/models/Users')
 
-Sessions.db = [
-    {
-    events: [{id: 2, qty: 3}, {id: 1, qty: 4}],
-    userID: 01
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// can create admin route and add this to route.use
+var isLoggedIn = (req, res, next) => {
+    console.log('SESSION: ', req.app.locals.session)
+    if (req.app.locals.session.userID) {
+        next();
+    } else {
+        var err = {msg: 'You must be logged in to view this page.'}
+        res.render('error', {err})
     }
-]
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // INDEX PAGE
 router.get('/', function(req, res) {
@@ -46,10 +55,9 @@ router.get('/events/search', function(req, res) {
 })
 
 
-// SHOW FORM FOR CREATING NEW EVENTS (works)
-router.get("/events/new", (req, res) => {
+// SHOW FORM FOR CREATING NEW EVENTS
+router.get("/events/new", isLoggedIn, (req, res) => {
     // newEvent is for testing purposes
-    console.log('EVENTS DB: ', Events.db)
     var newEvent = {
             name: 'Code event',
             startDate: '01/01/17',

@@ -1,0 +1,11 @@
+<% include partials/header %>
+
+<% console.log(err) %>
+
+<h2>Error: </h2>
+<ul>
+	<% for (var key in err) { %>
+		<li><p><%= err[key] %></p></li>
+	<% } %>
+</ul>
+<% include partials/footer %>

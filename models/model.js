@@ -70,11 +70,9 @@ class Model {
     }
 
     getOne(obj, cb) {
-        console.log('obj before if: ', obj)
-        if (typeof obj === 'string') {
+        if (typeof obj === 'string' && obj) {
             obj = {id: obj};
         }
-        console.log('obj after if: ', obj)
         var err = {}, type = this.type;
         var objKeys = Object.keys(obj);
         var objLength = objKeys.length;
@@ -123,26 +121,21 @@ class Model {
                 
 
     update(id, newObj, cb) {
-        var err;
-        var successMessage;
-        console.log("id: ", typeof id)
+        var successMessage, newObj, err;
+        //console.log("id: ", typeof id)
         
-                for (var i =0; i < this.db.length; i++){
-                      console.log("Enterd into the loop "  + typeof this.db[i].id)
-                    if (this.db[i].id === parseInt(id)) {
-                          console.log("this.db[i]: ", this.db[i])
-                        for(let key in newObj)
-                        {
-                            this.db[i][key] = newObj[key]
-                            successMessage="UPDATED DATABASE"
-                        }
-                    }
-              }
-              if(successMessage == undefined) {
-                err = "Update unsuccessful"
-              }
-       
-        cb(err, successMessage)
+        for (var i =0; i < this.db.length; i++){
+             // console.log("Enterd into the loop "  + typeof this.db[i].id)
+            if (this.db[i].id === parseInt(id)) {
+                for(let key in newObj) {
+                    this.db[i][key] = newObj[key]
+                }
+                return cb(err = null, this.db[i]);
+            }
+        }
+
+        err = {msg: "Update unsuccessful"}
+        cb(err);
     }
 
 

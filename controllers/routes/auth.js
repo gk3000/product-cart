@@ -3,7 +3,7 @@ var express      = require('express'),
     app          = express(),
     Sessions     = require('../../models/models/Sessions'),
     Users		 = require('../../models/models/Users'),
-    Events		 = require('../../models/models/Users')
+    Events		 = require('../../models/models/Events')
 
 
 router.get('/', (req, res) => {
@@ -28,6 +28,7 @@ router.post('/login', (req, res) => {
 					var err = {msg: 'Something went wrong. Please try again later.'}
 					res.render('login', {err})
 				} else {
+					req.app.locals.session = session;
 					res.render('user')
 				}
 			})
@@ -52,6 +53,7 @@ router.post('/register', (req, res) => {
 					var err = {msg: 'Something went wrong. Please try again later.'}
 					res.render('register', {err})
 				} else {
+					req.app.locals.session = session;
 					res.render('user')
 				}
 			})
@@ -60,11 +62,10 @@ router.post('/register', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-	Sessions.save({}, (err, session) => {
+	Sessions.update(req.app.locals.session.id, {username: undefined, userID: undefined}, (err, session) => {
 		if (err) {
 			console.log(err);
 		} else {
-			res.cookie('sessionID', session.id, { maxAge: 100000, httpOnly: false });
 			req.app.locals.session = session;
 			res.redirect('/events')
 		}
