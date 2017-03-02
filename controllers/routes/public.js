@@ -110,10 +110,12 @@ router.get('/cart/update/:id', function (req, res) {
 
 /////////// AUTH ROUTES ///////////
 
+// SHOW LOG IN FORM
 router.get('/login', (req, res) => {
 	res.render('login')
 })
 
+// LOG IN
 router.post('/login', (req, res) => {
 	var username = req.body.username,
 		password = req.body.password;
@@ -136,10 +138,12 @@ router.post('/login', (req, res) => {
 	})
 })
 
+// SHOW REGISTER FORM
 router.get('/register', (req, res) => {
 	res.render('register')
 })
 
+// REGISTER
 router.post('/register', (req, res) => {
 	var username = req.body.username,
 		password = req.body.password;
