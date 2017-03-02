@@ -20,6 +20,7 @@ render(name) {
       //document.getElementById("eventsList").appendTo('eventsList')('<p>TEST</p>')
       $( "div#eventsList" ).children().remove()
       for (var key in this.db) {
+        console.log("----db-----", this.db)
         var eventName = this.db[key].name
         var eventPrice = this.db[key].price*this.db[key].number
        $(eventBlock(this.db[key].name, this.db[key].price*this.db[key].number) ).appendTo( "#eventsList" )
@@ -141,7 +142,23 @@ class BrowserController extends Controller {
   browse(meth, arg1, arg2) {
     this[meth](arg1, arg2);
   }
+
+
 }
+
+// class AsyncController extends BrowserController {
+
+//   constructor() {
+//     super()
+//     // connection
+//   }
+
+//   post(key, value) {
+//     super(key, value);
+//     // post to server
+//     // and error catching if you desire
+//   }
+// }
 
 //-----------------------------
 
