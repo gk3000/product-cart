@@ -16,7 +16,6 @@ class BrowserView extends View {
 
 render(name) {
     if (name !== undefined) {
-      console.log("------db-------", this.db)
       //document.getElementById("display").textContent=this.template + ' ' + name;
       //document.getElementById("eventsList").appendTo('eventsList')('<p>TEST</p>')
       $( "div#eventsList" ).children().remove()
@@ -70,10 +69,7 @@ class Model {
   updateQuantity(name, quantity) {
     var eventID
     for (var key in this.db){
-      console.log("this.db[key].name", this.db[key].name, "name", name)
-              console.log("--this.db[key].name--", this.db[key].name == name)
       if (this.db[key].name == name) {
-        console.log("--this.db--", this.db )
         eventID = key
 
       }
@@ -184,7 +180,6 @@ var updating = function(event) {
 };
 
 var removeFromCart = function(event) {
-    console.log("----name----", $(event.target).closest("div").find("#db").text())
   event.preventDefault()
 
   brcn.browse("remove", $(event.target).closest("div").find("#db").text());
@@ -199,7 +194,6 @@ $( document ).ready(function() {
 };
 
 var runnin = function(name, price) {
-  console.log("------name, price in the bundle------", name, price)
  brcn.browse("post", name, price);
 
 $( document ).ready(function() {
