@@ -9,7 +9,7 @@ Sessions.db = [
     {
 	    events: [{id: 2, qty: 3}, {id: 1, qty: 4}],
 	    user: {id: 1, username: 'admin', admin: true},
-	    id: 3
+	    id: 1
     }
 ]
 
