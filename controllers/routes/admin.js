@@ -5,7 +5,6 @@ var express      = require('express'),
     Users		 = require('../../models/models/Users'),
     Events		 = require('../../models/models/Events');
 
-
 // checks if user is admin
 router.use((req, res, next) => {
     var err = {msg: 'You must be logged in as admin to view this page.'}
