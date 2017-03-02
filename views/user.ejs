@@ -1,8 +1,8 @@
 <% include partials/header %>
 
 <h2>User info</h2>
-<% if (session.username) { %>
-	<p><b>Username: </b><%= session.username %></p>
+<% if (session.user) { %>
+	<p><b>Username: </b><%= session.user.username %></p>
 <% } else { %>
 	<p class="text-danger">You must be logged in to view this page.</p>
 <% } %>

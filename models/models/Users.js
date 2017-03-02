@@ -2,12 +2,13 @@ var Model = require('../Model.js');
 
 var Users = new Model({
     username: {type: 'string', required: true, unique: true},
-    password: {type: 'string', required: true}
+    password: {type: 'string', required: true},
+    admin: {type: 'boolean'}
 })
 
 Users.db = [
-	{id: 1, username: "marilena", password: "frank"},
-	{id: 2, username: "marilena2", password: "frank"}
+	{id: 1, username: "admin", password: "admin", admin: true},
+	{id: 2, username: "user", password: "user", admin: false}
 ]
 
 // should this be here???
@@ -17,6 +18,7 @@ Users.login = (obj, cb) => {
     for (var ele of Users.db) {
         if (ele.username === obj.username) {
         	if (ele.password === obj.password) {
+                console.log('ELE LOGIN: ', ele)
         		return cb(err = null, ele);
         	} else {
         		err.password = "Incorrect password"

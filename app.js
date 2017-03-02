@@ -26,7 +26,6 @@ app.locals = {
 
 // Creates session and cookie when app is started
 var Sessions = require('./models/models/Sessions')
-
 var count = 0;
 
 app.use((req, res, next) => {
@@ -54,11 +53,12 @@ app.use((req, res, next) => {
 
 
 // Set up routes
-var eventRoutes = require('./controllers/routes/events.js');
-app.use("/", eventRoutes)
+// public, user and admin routes?
+var publicRoutes = require('./controllers/routes/public.js');
+app.use("/", publicRoutes)
 
-var authRoutes = require('./controllers/routes/auth.js');
-app.use('/user', authRoutes)
+var userRoutes = require('./controllers/routes/user.js');
+app.use('/user', userRoutes)
 
 var adminRoutes = require('./controllers/routes/admin.js')
 app.use('/admin', adminRoutes)
