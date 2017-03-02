@@ -2,8 +2,6 @@
 <html>
 <head>
 	<title>Barcelona Code School</title>
-  <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
-
 	<!-- Bootstrap CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	
@@ -29,19 +27,25 @@
         <li class="active"><a href="/events">Calendar<span class="sr-only">(current)</span></a></li>
         <li><a href="/events/new">Add event</a></li>
       </ul>
-      
+          <form action="/events/search" method ="GET" class="navbar-form navbar-left">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name= "search">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+         
       <ul class="nav navbar-nav navbar-right">
-
-        <li><a href="/cart" formaction="/cart" formmethod="get"><span class="glyphicon glyphicon-shopping-cart">(1)</a></span></li>
-
-      <% if (user.username) { %>
-
+      <% if (session.username) { %>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= user.username %> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= session.username %> <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/user">My account</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href="/user/logout">Log out</a></li>
           </ul>
         </li>
       </ul>
@@ -53,7 +57,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
+<% console.log('///////////////////////////////////////// SESSION: ', session) %>
 <div class="container">
 <div class="page-header">
 	<h1>Barcelona Code School</h1>

@@ -6,8 +6,28 @@ var Users = new Model({
 })
 
 Users.db = [
-	{id: 1, username: "marilena", password: "frank"}
+	{id: 1, username: "marilena", password: "frank"},
+	{id: 2, username: "marilena2", password: "frank"}
 ]
+
+// should this be here???
+Users.login = (obj, cb) => {
+    var err = {};
+
+    for (var ele of Users.db) {
+        if (ele.username === obj.username) {
+        	if (ele.password === obj.password) {
+        		return cb(err = null, ele);
+        	} else {
+        		err.password = "Incorrect password"
+        		return cb(err, obj);
+        	}
+        }
+    }
+
+    err.username = "User not found."
+    cb(err, obj)
+}
 
 // var Users = new Model({
 //     firstName: {type: "string"},

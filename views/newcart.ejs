@@ -4,8 +4,7 @@
 <% var total = 0 %>
 <% var iva = 0.21 %>
 <div class="row">
-<%console.log(Sessions[0].events)%>
-	<% Sessions.events.forEach(function(event) { %>  <!-- here 'event' will return pairs of id : qty -->
+
 		<div class="col-md-12">
 			<div class="thumbnail">
 <!-- 				<img class="img-responsive" src="<%#= event.image %>"> -->
@@ -13,9 +12,9 @@
 				<small class="text-muted">
 				Starts on: <%= event.startDate%>
 				</small></h2>
-					<form class="form-inline" action="/cart/update/<%=event.id%>" method="post">
+					<form class="form-inline" action="/cart/update/<%=event.id%>" method="get">
 						<!-- <label for="quantity" class=" control-label">Change the quantity</label> -->
-						<select class="form-control" data-toggle="tooltip" name="updateQuantity" data-placement="bottom" title="Change the quantity">
+						<select class="form-control" data-toggle="tooltip" name="changeQuantity" data-placement="bottom" title="Change the quantity">
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -40,7 +39,7 @@
 				<a class="btn btn-default" action="/events/<#%= event._id %>">Learn more</a> -->
 			</div>
 		</div>
-	<% }) %>
+
 
 </div>
 

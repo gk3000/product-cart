@@ -20,13 +20,14 @@ render(name) {
       //document.getElementById("display").textContent=this.template + ' ' + name;
       //document.getElementById("eventsList").appendTo('eventsList')('<p>TEST</p>')
       $( "div#eventsList" ).children().remove()
-      for (var key in this.db) { 
-        console.log("-----event-----", event)
-        $(eventBlock(this.db[key].name, this.db[key].price*this.db[key].number) ).appendTo( "#eventsList" )
+      for (var key in this.db) {
+        var eventName = this.db[key].name
+        var eventPrice = this.db[key].price*this.db[key].number
+       $(eventBlock(this.db[key].name, this.db[key].price*this.db[key].number) ).appendTo( "#eventsList" )
       } 
       } else {
-      document.getElementById("display").textContent="that doesn't exist";
-      document.getElementById("db").textContent=JSON.stringify(this.db);
+        document.getElementById("display").textContent="that doesn't exist";
+        document.getElementById("db").textContent=JSON.stringify(this.db);
     }  
   }
 }
@@ -197,8 +198,10 @@ $( document ).ready(function() {
 })
 };
 
-var runnin = function() {
- brcn.browse(document.getElementById("first").value, document.getElementById("second").value, document.getElementById("third").value);
+var runnin = function(name, price) {
+  console.log("------name, price in the bundle------", name, price)
+ brcn.browse("post", name, price);
+
 $( document ).ready(function() {
   let sum = 0
   $(".price").each((i, ele) => {

@@ -1,26 +1,14 @@
 // this object is your mongoose
 class Model {
-    constructor (newSchema) {
+    constructor(newSchema) {
         this.db = []
-        this.schema = {}
+        this.sessiondb = []
         this.currentID = 3; // bc of hardcoded events
-        this.setSchema(newSchema, (err, schema) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('SCHEMA SUCCESSFULLY ADDED')
-            }
-        })
+        this.schema = newSchema;
     }
 
     type(obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
-    }
-
-    setSchema(newSchema, cb) {
-        this.schema = newSchema;
-        var err;
-        cb(err, newSchema);
     }
 
     save(obj, cb) {
@@ -32,18 +20,19 @@ class Model {
         if (valid) {
             validatedObj.id = this.currentID;
             this.db.push(validatedObj); 
-            this.currentID++;   
+            this.currentID++; 
+
         } else {
             err = validatedObj;
         }
-        console.log('err: ', err, 'validatedObj: ', validatedObj)
         cb(err, validatedObj);
     }
+
 
     validate(obj) {
         var schema = this.schema, type = this.type;
         var newObj = {}, err = {}
-        console.log('obj in validate: ', obj)
+
         for (var x in schema) {
             if (schema[x].unique){
                 for (var ele of this.db) {
@@ -72,7 +61,6 @@ class Model {
                 }
             }
         };
-
         return Object.keys(err).length === 0 ? [newObj, true] : [err, false];
     }
 
@@ -82,58 +70,166 @@ class Model {
     }
 
     getOne(obj, cb) {
-        var err, type = this.type;
-        var objKey = Object.keys(obj)[0];
-        var objVal = obj[objKey];
-        
-        if (type(obj) !== 'object') {
-            var err = 'Missing obj argument'
-            console.log(err)
-            cb(err);
-        } else {
-            for (var ele of this.db) {
-                if (ele[objKey] == objVal) {
-                    return cb(err, ele);
+        if (typeof obj === 'string' && obj) {
+            obj = {id: obj};
+        }
+        var err = {}, type = this.type;
+        var objKeys = Object.keys(obj);
+        var objLength = objKeys.length;
+
+        for (var ele of this.db) {
+            var count = 0;
+            objKeys.forEach(key => {
+                if (ele[key] == obj[key]) {
+                 count++
                 }
+            })
+
+            if (count === objLength) {
+                return cb(err = null, ele)
             }
         }
+
+        err = "Object not found."
+        cb(err)
     }
 
-    delete(obj, cb) {
+    delete(id,obj, cb) {
         var err = null;
         var successMessage= null;
+        var type = this.type
             
             if (type(obj) !== 'object') {
                 var err = 'Missing obj argument'
+                console.log(err)
+                return cb(err);
             } else {
-                for (var i =0; i < this.db.length; i++)
-                if (this.bd[i].currentID === obj.currentID) {
-                    this.db.splice(i,1);
-                  break;
+                for (var i =0; i < this.db.length; i++){
+                    if (this.db[i].id == id) {
+                        this.db.splice(i,1);
+                      break;
+                    }
+                  
                 }
-                   var successMessage = "Deleted successfully"
+                    
             }
 
-                
-                
-                    // if they aren't tne same size they aren't the same thing
-                    // if they are the same size and do n't have the same properties, they arent' the same
-                    // if they are the same, delete
-            
-             cb(err,successMessage)
-            // logic that selects the right oject from the db
-            // assign it to sentObj;
+  
+              return cb(err,obj)
+          
         }
                 
 
     update(id, newObj, cb) {
-        var err;
-        var successMessage;
-        
-        newObj.id = id;
-        this.db.push(newObj); 
-        cb(err, successMessage);
-    }
-};
+        var successMessage, newObj, err;
+        //console.log("id: ", typeof id)
+        for (var i =0; i < this.db.length; i++){
+             // console.log("Enterd into the loop "  + typeof this.db[i].id)
+            if (this.db[i].id === parseInt(id)) {
+                for(let key in newObj) {
+                    this.db[i][key] = newObj[key]
+                }
+                return cb(err = null, this.db[i]);
+            }
+        }
 
+        err = {msg: "Update unsuccessful"}
+        cb(err);
+    }
+
+
+    search(searchword , cb){
+        var err = null;
+        var eventSent = undefined;
+        var type = this.type
+        var event;
+        var eventsarray = [];
+        
+        console.log("in search method",searchword)
+        for (var i =0; i < this.db.length; i++){
+            console.log("enterd into the first dbloop",this.db)     
+            for(let key in this.db[i]) {
+                var idno;
+                console.log("keys in db",key)
+                var word=this.db[i][key]
+                 console.log("word is  ", word)
+                 
+                if(type(word) === 'array'){
+                    
+                   for(let j of word){
+                        console.log(j)
+                        console.log(searchword)
+                        if(searchword == j ) {
+                          console.log("found word in an array of index", this.db[i].id)
+                          var idno = this.db[i].id
+                           event = this.getOne({id:idno},function(err,event){
+                           console.log("From getone method",event)
+                            eventsarray.push(event) 
+                            console.log("After pushing in array if it is an array",eventsarray)
+                          })
+                          
+                        }  
+
+                   }
+                }
+                else if(searchword == word) {
+        
+                    console.log("Found Word as word")
+                    var idno = this.db[i].id
+                      event = this.getOne({id:idno},function(err,event){
+                         eventsarray.push(event) 
+                         console.log("After pushing in array if it is a string",eventsarray)      
+                      })
+                       
+                }  
+            }     
+        }
+        if (eventsarray == undefined) {
+            err = "Word not found"
+        }
+        console.log("Before return statement",eventsarray) 
+        
+         cb(err,eventsarray)
+    }
+}    
+
+
+class Sessions extends Model {
+    constructor (newSchema) {
+        super()
+        this.sessiondb = []
+    }
+
+    type(obj) {
+        return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    }
+    savesessions(obj, cb) {
+       
+        var sessionsarray = [];
+        if (type(obj) !== 'object') {
+                var err = 'Missing obj argument'
+                console.log(err)
+                return cb(err);
+        } else {
+                var idno = obj.eventIDs
+                console.log(idno)
+                this.sessiondb.push(idno)
+                console.log(sessiondb)
+                // event = this.getOne({id:idno},function(err,event){
+                //     console.log("From getone method sessiondb",event)
+                //     sessionsarray.push(event) 
+                //     console.log("After pushing in array if it is a string",sessionsarray)      
+              //  })
+                      
+                           
+        }
+
+        if (this.sessiondb == undefined) {
+            err = "session not saved"
+        }
+        console.log("Before return statement",sessionsarray) 
+        
+         cb(err,sessiondb)
+    }
+}
 module.exports = Model;

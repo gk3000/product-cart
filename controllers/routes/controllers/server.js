@@ -55,7 +55,7 @@ Events.db = [
     }
 ]
 
-// console.log('Events after hardcoding: ', Events)
+console.log('Events after hardcoding: ', Events)
 
 var Users = new Model({
     firstName: {type: "string"},
@@ -95,7 +95,7 @@ router.get("/events/new", (req, res) => {
 
 // POST NEW EVENT (works)
 router.post('/events/new', (req, res) => {
-    // console.log('EVENTS OBJECT: ', Events)
+    console.log('EVENTS OBJECT: ', Events)
     var name = req.body.name,
         startDate = req.body.startdate,
         endDate = req.body.enddate,
@@ -160,7 +160,7 @@ router.get("/cart", (req, res) => {
 // args: post, sessionID, amount of products
 
 router.post("/cart/update/:id", (req, res) => {
-    // console.log("--------new quantity--------", req.body.name)
+    console.log("--------new quantity--------", req.body.name)
     var qty = req.body.name
     Sessions.update(req.params.id, {qty: req.body.name}, (err, record) =>{
         if (err) {

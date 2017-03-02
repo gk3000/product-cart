@@ -1,29 +1,13 @@
 <% include partials/header %>
 <h2>Cart page</h2>
 
-<script type='text/javascript'><%- include('../lib/bundle.js')-%></script>
 
-<script type='text/javascript'>
-	// $( document ).ready(function() {
-	// 	debugger
-	//   sum = 0 
-	//   $(".price").each((i, ele)=>{
-	//   sum += parseInt($(ele).text())
-	//   })
-	//   $("#cartTot").text(sum)
-	//   $("#Total").text((sum+sum*0.21).toFixed(2))
-	// })
-	function checkout(event) {
-		event.preventDefault()
-		document.location.href = "/checkout/" + $("#Total").text() // javascript function to change location
-	}
-</script>
 
 <form>
   method: <input type="text" name="fname" value="" id="first"><br>
   eventName: <input type="text" name="lname" value="" id="second"><br>
   eventPrice: <input type="text" name="lname" value="" id="third"><br><br>
-  <input type="button" onclick="runnin()" value="Submit form">
+  <input type="button" onclick="runnin(name, price)" value="Submit form">
 </form>
 <br>
 <!-- <span id="display"></span>
@@ -39,13 +23,10 @@
 		&emsp; update- arg1:item's key,  arg2:new value<br>
 		&emsp; post- arg1:new key, arg2:new value<br>
 		&emsp; remove- key
-
 	</strong>
 </div>
 
-<% var sum = 0 %>
-<% var total = 0 %>
-<% var iva = 0.21 %>
+
 <div class="row">
 	<div class="col-md-12" id="eventsList">
 	</div>
@@ -90,6 +71,28 @@
 			</div>
 		</div>
 </div>
+
+<script type='text/javascript'><%- include('../lib/bundle.js')-%></script>
+
+<script type='text/javascript'>
+	var name = "<%= event.name %>"
+	var price = "<%= event.price %>"
+	console.log("--name on the cart page--", name, "--price on the cart page--", price)
+	// $( document ).ready(function() {
+	// 	debugger
+	//   sum = 0 
+	//   $(".price").each((i, ele)=>{
+	//   sum += parseInt($(ele).text())
+	//   })
+	//   $("#cartTot").text(sum)
+	//   $("#Total").text((sum+sum*0.21).toFixed(2))
+	// })
+	function checkout(event) {
+		event.preventDefault()
+		document.location.href = "/checkout/" + $("#Total").text() // javascript function to change location
+	}
+	window.onload = runnin(name, price)
+</script>
 
 <% include partials/footer %>
 

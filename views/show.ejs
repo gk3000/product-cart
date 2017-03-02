@@ -1,3 +1,28 @@
-<h1>This is the show file</h1>
 
-<p>Event: <%= event %></p>
+<form action="/events/<%= event.id %>" method="post">
+<div class="row">
+	
+		<div class="col-md-6">
+			<div class="thumbnail">
+			    <h1><%= event.name %></h1>
+				<img class="img-responsive" src="<%= event.image %>">
+				
+				<p><b>Starts:</b> <%= event.startDate %> | <b>Ends:</b> <%= event.endDate %></p>
+				<% event.subjects.forEach(function(subject) { %>
+					<div class="label label-default"><%= subject %></div>
+				<% }) %>
+				<% event.type.forEach(function(type){ %>
+					<div class="label label-info"><%= type %></div>
+					<% }) %>
+				<p class="pull-right"><strong>Price: </strong>€<%= event.price %></p>
+				<hr>
+				<p><%= event.description.slice(0, 100) %>...</p>
+				<a class="btn btn-primary" href="/cart">Add to cart</a>
+				<a class="btn btn-default" href="/events/<%= event.id %>">Learn more</a>
+			</div>
+		</div>
+	
+</div>
+</form>
+
+<% include partials/footer %>
