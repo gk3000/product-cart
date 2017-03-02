@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "babel-compile -p es2015 src:lib",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

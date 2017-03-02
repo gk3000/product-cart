@@ -35,7 +35,7 @@ render(name) {
 class Model {
   constructor() {
     this.db = {};
-    this.nextId = 0;
+    this.nextId = this.nextId || 0;
   }
 
   addOne(name, price) {

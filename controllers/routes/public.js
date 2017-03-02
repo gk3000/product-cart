@@ -80,7 +80,7 @@ router.get("/cart", (req, res) => {
 
 router.get("/events/cart/:id", function(req, res){
     Events.getOne({id: req.params.id}, (err, event) => {
-        res.render('newcart', {event});
+        res.render('cart2', {event});
     })
 })        
 
@@ -108,6 +108,10 @@ router.get('/cart/update/:id', function (req, res) {
 });
 
 
+router.get("/checkout/:total", (req, res) => {
+    total = req.params.total;
+    res.render("checkout");
+})
 /////////// AUTH ROUTES ///////////
 
 router.get('/login', (req, res) => {
