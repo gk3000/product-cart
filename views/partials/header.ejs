@@ -12,7 +12,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -25,7 +24,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="/events">Calendar<span class="sr-only">(current)</span></a></li>
-        <li><a href="/events/new">Add event</a></li>
+        <li><a href="/admin">Admin</a></li>
       </ul>
           <form action="/events/search" method ="GET" class="navbar-form navbar-left">
             <div class="input-group">
@@ -39,9 +38,9 @@
           </form>
          
       <ul class="nav navbar-nav navbar-right">
-      <% if (session.username) { %>
+      <% if (session.user) { %>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= session.username %> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= session.user.username %> <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/user">My account</a></li>
             <li role="separator" class="divider"></li>
@@ -51,8 +50,8 @@
       </ul>
 
       <% } else { %>
-        <li><a href="/user/login">Log in</a></li>
-        <li><a href="/user/register">Register</a></li>
+        <li><a href="/login">Log in</a></li>
+        <li><a href="/register">Register</a></li>
       <% } %>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -61,4 +60,4 @@
 <div class="container">
 <div class="page-header">
 	<h1>Barcelona Code School</h1>
-</div>
+</div>

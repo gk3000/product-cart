@@ -1,6 +1,6 @@
 <% include partials/header %>
 <h2>Update event</h2>
-<form action="/events/update/<%= event.id %>" method="post">
+<form action="/admin/events/update/<%= event.id %>" method="post">
 	<label>Event name</label>
 	<input class="form-control" type="text" name="name" value="<%= event.name %>">
 	<label>Start date</label>

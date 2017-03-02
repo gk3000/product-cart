@@ -2,9 +2,8 @@ var express      = require('express'),
     router       = express.Router(),
     app          = express(),
     Sessions     = require('../../models/models/Sessions'),
-    Users        = require('../../models/models/Users'),
-    Events       = require('../../models/models/Events');
-
+    Users		 = require('../../models/models/Users'),
+    Events		 = require('../../models/models/Events');
 
 // checks if user is admin
 router.use((req, res, next) => {
