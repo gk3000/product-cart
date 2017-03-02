@@ -1,6 +1,6 @@
 <% include partials/header %>
 <h2>Delete event</h2>
-<form action="/events/delete/<%= event.id %>" method="POST">
+<form action="/admin/events/delete/<%= event.id %>" method="POST">
 	<label>Event name</label>
 	<input class="form-control" type="text" name="name" value="<%= event.name %>">
 	<input class="form-control" type="submit" value="Are you sure ?">
