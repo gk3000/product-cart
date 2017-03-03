@@ -63,6 +63,7 @@ app.use('/user', userRoutes)
 var adminRoutes = require('./controllers/routes/admin.js')
 app.use('/admin', adminRoutes)
 
-app.listen(4001, function() {
-    console.log("---------------listening in port 4001--------------");
+const port = process.env.PORT || 4001
+app.listen(port, function() {
+    console.log("---------------listening in port "+port+"--------------");
 })
