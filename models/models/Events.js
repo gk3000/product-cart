@@ -1,4 +1,4 @@
-var Model = require('../Model.js');
+var Model = require('../model.js');
 
 var Events = new Model({
     name: {type: "string", unique: true, required: true},

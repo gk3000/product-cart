@@ -1,4 +1,4 @@
-var Model = require('../Model.js');
+var Model = require('../model.js');
 
 var Sessions = new Model({
 	events: {type: 'array'},

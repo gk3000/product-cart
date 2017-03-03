@@ -1,4 +1,4 @@
-var Model = require('../Model.js');
+var Model = require('../model.js');
 
 var Users = new Model({
     username: {type: 'string', required: true, unique: true},
