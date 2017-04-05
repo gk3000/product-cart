@@ -1,7 +1,22 @@
 
 <% include partials/header %>
+<script src="https://js.stripe.com/v3/"></script>
 <h2>Checkout page</h2>
 <h3>Amount to pay: <%= total %>€</h3>
+
+<form action="/your-server-side-code" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_47IIvaiJ7FanzzHsVr7vaEKH"
+    data-amount=<%= total %>
+    data-name="Barcelona Code School / Arms and Legs FOM S.L."
+    data-description="Widget"
+    data-image="https://s3.amazonaws.com/stripe-uploads/acct_17uONNLbTnjI9v8tmerchant-icon-1474830725525-logo.png"
+    data-locale="auto"
+    data-currency="eur">
+  </script>
+</form>
+
 
 
 <% include partials/footer %>
